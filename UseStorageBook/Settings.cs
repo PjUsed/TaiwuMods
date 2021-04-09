@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using System;
 using System.Linq;
 
 namespace UseStorageBook
@@ -99,5 +100,24 @@ namespace UseStorageBook
         }
 
         #endregion 设置初始化方法
+
+        #region 公共方法
+
+        public void LevelSetAll(bool value)
+        {
+            Level.Value = Enumerable.Repeat(value, BookLevel.Length).ToArray();
+        }
+
+        public void GongFaSetAll(bool value)
+        {
+            GongFa.Value = Enumerable.Repeat(value, BookGongFa.Length).ToArray();
+        }
+
+        public void SectSetAll(bool value)
+        {
+            Sect.Value = Enumerable.Repeat(value, BookSect.Length).ToArray();
+        }
+
+        #endregion
     }
 }
