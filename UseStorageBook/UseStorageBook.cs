@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
 using HarmonyLib;
 using System.Linq;
 using TaiwuUIKit.GameObjects;
@@ -16,7 +17,9 @@ namespace UseStorageBook
     public class UseStorageBook : BaseUnityPlugin
     {
         public static ModHelper ModHelper { get; private set; }
+        public static ManualLogSource ModLogger { get; private set; }
         public static Settings Settings { get; private set; }
+        public static bool IsEnable => Settings.Enabled.Value;
 
         public const string ModId = "UseStorageBook";
         public const string ModName = "使用仓库中的书";
@@ -29,6 +32,7 @@ namespace UseStorageBook
             Settings.Init(Config);
             new Harmony(ModId).PatchAll();
             ModHelper = new ModHelper(ModId, $"{ModName}-{ModVersion}");
+            ModLogger = base.Logger;
 
             var container = new BoxAutoSizeModelGameObject
             {
