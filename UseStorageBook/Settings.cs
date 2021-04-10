@@ -1,5 +1,4 @@
 ﻿using BepInEx.Configuration;
-using System;
 using System.Linq;
 
 namespace UseStorageBook
@@ -119,5 +118,46 @@ namespace UseStorageBook
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// 设置类型
+    /// </summary>
+    public enum SettingType
+    {
+        /// <summary>
+        /// 启用/禁用
+        /// </summary>
+        Enabled,
+
+        /// <summary>
+        /// 背包/仓库
+        /// </summary>
+        Source,
+
+        /// <summary>
+        /// 真传/手抄
+        /// </summary>
+        Type,
+
+        /// <summary>
+        /// 阅读进度
+        /// </summary>
+        Status,
+
+        /// <summary>
+        /// 品级
+        /// </summary>
+        Level,
+
+        /// <summary>
+        /// 功法类型
+        /// </summary>
+        GongFa,
+
+        /// <summary>
+        /// 门派
+        /// </summary>
+        Sect
     }
 }

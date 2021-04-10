@@ -17,9 +17,9 @@ namespace UseStorageBook
             if (!UseStorageBook.IsEnable)
                 return true;
 
+            UseStorageBook.ModLogger.LogInfo("加载书籍...");
             var books = Book.GetAllBooks().Where(x => x.IsMatch(UseStorageBook.Settings)).ToList();
 
-            RemoveBook();
             SetBook(books);
             return false;
         }
@@ -32,6 +32,10 @@ namespace UseStorageBook
         private static void SetBook(List<Book> books)
         {
             var studySkillTyp = BuildingWindow.instance.studySkillTyp;
+
+            //Traverse.Create(BuildingWindow.instance).Method("RemoveBook");
+            ReflectionMethods.Invoke(BuildingWindow.instance, "RemoveBook");
+
             // 复制原始代码(部分修改)
             List<int> itemSort = DateFile.instance.GetItemSort(books.ConvertAll(x => x.Id));
             for (int j = 0; j < itemSort.Count; j++)
@@ -42,7 +46,7 @@ namespace UseStorageBook
                     continue;
                 }
 
-                GameObject gameObject = UnityEngine.Object.Instantiate(BuildingWindow.instance.bookIcon, Vector3.zero, Quaternion.identity);
+                GameObject gameObject = Object.Instantiate(BuildingWindow.instance.bookIcon, Vector3.zero, Quaternion.identity);
                 gameObject.name = "Item," + num3;
                 gameObject.transform.SetParent(BuildingWindow.instance.bookHolder, worldPositionStays: false);
                 gameObject.GetComponent<Toggle>().group = BuildingWindow.instance.bookHolder.GetComponent<ToggleGroup>();
@@ -67,35 +71,34 @@ namespace UseStorageBook
             }
         }
 
-        /// <summary>
-        /// 移除所有书籍
-        /// </summary>
-        private static void RemoveBook()
-        {
-            ReflectionMethods.Invoke(BuildingWindow.instance, "RemoveBook");
-        }
-
         #endregion
     }
 
     [HarmonyPatch(typeof(BuildingWindow), "SetChooseBookWindow")]
     public class BuildingWindow_SetChooseBookWindow_Patch
     {
-        static void Prefix(HomeSystem __instance)
+        static void Postfix()
         {
             if (!UseStorageBook.IsEnable)
                 return;
 
             // 设置过滤UI
-
-            
+            if (BookFilter.Instance is null)
+                BookFilter.Load();
+            BookFilter.Instance?.ShowMenu();
         }
     }
 
     [HarmonyPatch(typeof(BuildingWindow), "CloseBookWindow")]
     public class BuildingWindow_CloseBookWindow_Patch
     {
-        
+        static void Postfix()
+        {
+            if (!UseStorageBook.IsEnable)
+                return;
+
+            BookFilter.Instance?.CloseMenu();
+        }
     }
 
     /// <summary>

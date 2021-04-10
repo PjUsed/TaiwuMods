@@ -66,16 +66,21 @@ namespace UseStorageBook
             Source = source;
             var df = DateFile.instance;
             var itemId = int.Parse(df.GetItemDate(id, 999));
-            var gongFaId = int.Parse(df.presetitemDate[itemId][32]);
+            var gongFaId = 0;
+            if(BuildingWindow.instance.studySkillTyp >= 17)
+                gongFaId = int.Parse(df.presetitemDate[itemId][32]);
             Level = int.Parse(df.presetitemDate[itemId][8]) - 1;
             ItemType = int.Parse(df.presetitemDate[itemId][31]);
             var pages = BuildingWindow.instance.studySkillTyp >= 17
                 ? (df.gongFaBookPages.ContainsKey(gongFaId) ? df.gongFaBookPages[gongFaId].Sum() : 0)
                 : (df.skillBookPages.ContainsKey(gongFaId) ? df.skillBookPages[gongFaId].Sum() : 0);
             ReadStatus = pages <= 0 ? 0 : pages < 10 ? 1 : 2;
-            Type = int.Parse(df.presetitemDate[itemId][35]) != 1 ? 0 : 1;
-            GongFaType = int.Parse(df.gongFaDate[gongFaId][1]);
-            Sect = int.Parse(df.gongFaDate[gongFaId][3]);
+            if (BuildingWindow.instance.studySkillTyp >= 17)
+            {
+                Type = int.Parse(df.presetitemDate[itemId][35]) != 1 ? 0 : 1;
+                GongFaType = int.Parse(df.gongFaDate[gongFaId][1]);
+                Sect = int.Parse(df.gongFaDate[gongFaId][3]);
+            }
         }
 
         #endregion 构造器
