@@ -21,7 +21,7 @@ namespace UseStorageBook
         public static Settings Settings { get; private set; }
         public static bool IsEnable => Settings.Enabled.Value;
 
-        public const string ModId = "UseStorageBook";
+        public const string ModId = "TaiwuMod.plugins.UseStorageBook";
         public const string ModName = "使用仓库中的书";
         public const string ModVersion = "1.4.0";
 
@@ -36,7 +36,7 @@ namespace UseStorageBook
 
             var container = new BoxAutoSizeModelGameObject
             {
-                Name = $"TaiwuMod.plugins.{ModId}"
+                Name = $"{ModId}.Container"
             };
             container.Group.Direction = Direction.Vertical;
             container.Group.Spacing = 5;
@@ -122,7 +122,7 @@ namespace UseStorageBook
                     Text = Settings.BookSource[index],
                     FontColor = Color.white,
                     isOn = val,
-                    onValueChanged = (value, _) => Settings.Source.Value[index] = value
+                    onValueChanged = (value, _) => Settings.SourceSet(index, value)
                 }));
 
             container.Children.Add(sourceContainer);
@@ -159,7 +159,7 @@ namespace UseStorageBook
                     Text = Settings.ReadStatus[index],
                     FontColor = Color.white,
                     isOn = val,
-                    onValueChanged = (value, _) => Settings.Status.Value[index] = value
+                    onValueChanged = (value, _) => Settings.StatusSet(index, value)
                 }));
 
             container.Children.Add(statusContainer);
@@ -196,7 +196,7 @@ namespace UseStorageBook
                     Text = Settings.BookType[index],
                     FontColor = Color.white,
                     isOn = val,
-                    onValueChanged = (value, _) => Settings.Type.Value[index] = value
+                    onValueChanged = (value, _) => Settings.TypeSet(index, value)
                 }));
 
             container.Children.Add(typeContainer);
@@ -474,7 +474,7 @@ namespace UseStorageBook
         private void BookLevelSelectionChanged(bool value, Toggle toggle)
         {
             var index = int.Parse(toggle.Name.Split('-').Last());
-            Settings.Level.Value[index] = value;
+            Settings.LevelSet(index, value);
             var el = toggle.Parent.Parent.Children
                 .Find(c => c.Name == $"{ModId}-Level-Title")
                 .Children.Find(c => c.Name == $"{ModId}-Level-Switch");
@@ -517,7 +517,7 @@ namespace UseStorageBook
         private void BookGongFaSelectionChanged(bool value, Toggle toggle)
         {
             var index = int.Parse(toggle.Name.Split('-').Last());
-            Settings.GongFa.Value[index] = value;
+            Settings.GongFaSet(index, value);
             var el = toggle.Parent.Parent.Children
                 .Find(c => c.Name == $"{ModId}-GongFa-Title")
                 .Children.Find(c => c.Name == $"{ModId}-GongFa-Switch");
@@ -562,7 +562,7 @@ namespace UseStorageBook
         private void BookSectSelectionChanged(bool value, Toggle toggle)
         {
             var index = int.Parse(toggle.Name.Split('-').Last());
-            Settings.Sect.Value[index] = value;
+            Settings.SectSet(index, value);
             var el = toggle.Parent.Parent.Parent.Children
                 .Find(c => c.Name == $"{ModId}-Sect-Title")
                 .Children.Find(c => c.Name == $"{ModId}-Sect-Switch");

@@ -86,35 +86,112 @@ namespace UseStorageBook
         /// <summary>
         /// 初始化设置
         /// </summary>
-        /// <param name="Config">持久化配置文件</param>
-        public void Init(ConfigFile Config)
+        /// <param name="config">持久化配置文件</param>
+        public void Init(ConfigFile config)
         {
-            Enabled = Config.Bind(nameof(Settings), nameof(Enabled), true, "是否开启 Mod");
-            Source = Config.Bind(nameof(Settings), nameof(Source), Enumerable.Repeat(true, BookSource.Length).ToArray(), "背包/仓库");
-            Type = Config.Bind(nameof(Settings), nameof(Type), Enumerable.Repeat(true, BookType.Length).ToArray(), "真传/手抄");
-            Status = Config.Bind(nameof(Settings), nameof(Status), Enumerable.Repeat(true, ReadStatus.Length).ToArray(), "阅读进度");
-            Level = Config.Bind(nameof(Settings), nameof(Level), Enumerable.Repeat(true, BookLevel.Length).ToArray(), "品级");
-            GongFa = Config.Bind(nameof(Settings), nameof(GongFa), Enumerable.Repeat(true, BookGongFa.Length).ToArray(), "功法");
-            Sect = Config.Bind(nameof(Settings), nameof(Sect), Enumerable.Repeat(true, BookSect.Length).ToArray(), "门派");
+            Enabled = config.Bind(nameof(Settings), nameof(Enabled), true, "是否开启 Mod");
+            Source = config.Bind(nameof(Settings), nameof(Source), Enumerable.Repeat(true, BookSource.Length).ToArray(), "背包/仓库");
+            Type = config.Bind(nameof(Settings), nameof(Type), Enumerable.Repeat(true, BookType.Length).ToArray(), "真传/手抄");
+            Status = config.Bind(nameof(Settings), nameof(Status), Enumerable.Repeat(true, ReadStatus.Length).ToArray(), "阅读进度");
+            Level = config.Bind(nameof(Settings), nameof(Level), Enumerable.Repeat(true, BookLevel.Length).ToArray(), "品级");
+            GongFa = config.Bind(nameof(Settings), nameof(GongFa), Enumerable.Repeat(true, BookGongFa.Length).ToArray(), "功法");
+            Sect = config.Bind(nameof(Settings), nameof(Sect), Enumerable.Repeat(true, BookSect.Length).ToArray(), "门派");
         }
 
         #endregion 设置初始化方法
 
         #region 公共方法
 
+        /// <summary>
+        /// 设置所有品级
+        /// </summary>
+        /// <param name="value">值</param>
         public void LevelSetAll(bool value)
         {
             Level.Value = Enumerable.Repeat(value, BookLevel.Length).ToArray();
         }
 
+        /// <summary>
+        /// 设置所有功法类型
+        /// </summary>
+        /// <param name="value">值</param>
         public void GongFaSetAll(bool value)
         {
             GongFa.Value = Enumerable.Repeat(value, BookGongFa.Length).ToArray();
         }
 
+        /// <summary>
+        /// 设置所有门派
+        /// </summary>
+        /// <param name="value">值</param>
         public void SectSetAll(bool value)
         {
             Sect.Value = Enumerable.Repeat(value, BookSect.Length).ToArray();
+        }
+
+        /// <summary>
+        /// 设置背包/仓库的值
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        public void SourceSet(int index, bool value) => SetArraySetting(Source, index, value);
+
+        /// <summary>
+        /// 设置真传/手抄的值
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        public void TypeSet(int index, bool value) => SetArraySetting(Type, index, value);
+
+        /// <summary>
+        /// 设置阅读进度的值
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        public void StatusSet(int index, bool value) => SetArraySetting(Status, index, value);
+
+        /// <summary>
+        /// 设置品级的值
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        public void LevelSet(int index, bool value) => SetArraySetting(Level, index, value);
+
+        /// <summary>
+        /// 设置功法类型的值
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        public void GongFaSet(int index, bool value) => SetArraySetting(GongFa, index, value);
+
+        /// <summary>
+        /// 设置门派的值
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        public void SectSet(int index, bool value) => SetArraySetting(Sect, index, value);
+
+        #endregion
+
+        #region 私有方法
+
+        /// <summary>
+        /// 设置数组设置
+        /// <para>配置文件设置为引用类型时，修改内部的值不会触发保存，此处重新给设置赋值</para>
+        /// </summary>
+        /// <typeparam name="T">数组类型</typeparam>
+        /// <param name="entry">数组设置</param>
+        /// <param name="index">索引</param>
+        /// <param name="value">值</param>
+        private static void SetArraySetting<T>(ConfigEntry<T[]> entry, int index, T value)
+        {
+            try
+            {
+                var array = entry.Value;
+                array[index] = value;
+                entry.Value = array;
+            }
+            catch { }
         }
 
         #endregion
