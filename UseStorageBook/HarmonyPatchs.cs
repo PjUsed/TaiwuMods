@@ -77,12 +77,14 @@ namespace UseStorageBook
     [HarmonyPatch(typeof(BuildingWindow), "SetChooseBookWindow")]
     public class BuildingWindow_SetChooseBookWindow_Patch
     {
+        /// <summary>
+        /// 设置并显示筛选界面UI
+        /// </summary>
         static void Postfix()
         {
             if (!UseStorageBook.IsEnable)
                 return;
 
-            // 设置过滤UI
             if (BookFilter.Instance is null)
                 BookFilter.Load();
             BookFilter.Instance?.ShowMenu();
@@ -92,6 +94,9 @@ namespace UseStorageBook
     [HarmonyPatch(typeof(BuildingWindow), "CloseBookWindow")]
     public class BuildingWindow_CloseBookWindow_Patch
     {
+        /// <summary>
+        /// 关闭筛选界面UI
+        /// </summary>
         static void Postfix()
         {
             if (!UseStorageBook.IsEnable)
@@ -100,13 +105,13 @@ namespace UseStorageBook
             BookFilter.Instance?.CloseMenu();
         }
     }
-
-    /// <summary>
-    /// 仓库中的书耐久为0时将其移除
-    /// </summary>
+    
     [HarmonyPatch(typeof(ReadBook), "CloseReadBook")]
     public static class ReadBook_CloseReadBook_Patch
     {
+        /// <summary>
+        /// 仓库中的书耐久为0时将其移除
+        /// </summary>
         static void Prefix()
         {
             if (!UseStorageBook.IsEnable)
