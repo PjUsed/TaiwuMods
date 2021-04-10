@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using System;
 using System.Linq;
 
 namespace UseStorageBook
@@ -183,13 +184,17 @@ namespace UseStorageBook
         /// <param name="entry">数组设置</param>
         /// <param name="index">索引</param>
         /// <param name="value">值</param>
-        private static void SetArraySetting<T>(ConfigEntry<T[]> entry, int index, T value)
+        private static void SetArraySetting<T>(ConfigEntry<T[]> entry, int index, T value) where T : IEquatable<T>
         {
             try
             {
-                var array = entry.Value;
-                array[index] = value;
-                entry.Value = array;
+                var array = new T[entry.Value.Length];
+                entry.Value.CopyTo(array, 0);
+                if(!array[index].Equals(value))
+                {
+                    array[index] = value;
+                    entry.Value = array.ToArray();
+                }
             }
             catch { }
         }

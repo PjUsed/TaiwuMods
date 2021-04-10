@@ -23,7 +23,7 @@ namespace UseStorageBook
 
         public const string ModId = "TaiwuMod.plugins.UseStorageBook";
         public const string ModName = "使用仓库中的书";
-        public const string ModVersion = "1.4.0";
+        public const string ModVersion = "1.4.1";
 
         public void Awake()
         {
@@ -96,7 +96,7 @@ namespace UseStorageBook
 
             var sourceContainer = new Container()
             {
-                Name = $"{ModId}-Source",
+                Name = $"{ModId}-Source-Container",
                 Element = { PreferredSize = { 0, containerHeight } },
                 Group =
                 {
@@ -107,7 +107,7 @@ namespace UseStorageBook
                 {
                     new TaiwuLabel
                     {
-                        Name = "{ModId}-Source-Label",
+                        Name = $"{ModId}-Source-Label",
                         Text = "背包/仓库",
                         Element = { PreferredSize = { labelWidth, 0 } },
                         UseBoldFont = true,
@@ -129,11 +129,48 @@ namespace UseStorageBook
 
             #endregion 背包/仓库设置
 
+            #region 真传/手抄设置
+
+            var typeContainer = new Container()
+            {
+                Name = $"{ModId}-Type-Container",
+                Element = { PreferredSize = { 0, containerHeight } },
+                Group =
+                {
+                    Direction = Direction.Horizontal,
+                    Spacing = 4
+                },
+                Children =
+                {
+                    new TaiwuLabel()
+                    {
+                        Name = $"{ModId}-Type-Label",
+                        Text = "真传/手抄",
+                        Element = { PreferredSize = { labelWidth, 0 } },
+                        UseBoldFont = true,
+                        UseOutline = true,
+                    }
+                }
+            };
+            typeContainer.Children.AddRange(Settings.Type.Value
+                .Select((val, index) => (ManagedGameObject)new TaiwuToggle
+                {
+                    Name = $"{ModId}-Type-Toggle-{index}",
+                    Text = Settings.BookType[index],
+                    FontColor = Color.white,
+                    isOn = val,
+                    onValueChanged = (value, _) => Settings.TypeSet(index, value)
+                }));
+
+            container.Children.Add(typeContainer);
+
+            #endregion 真传/手抄设置
+
             #region 阅读进度设置
 
             var statusContainer = new Container()
             {
-                Name = $"{ModId}-Status",
+                Name = $"{ModId}-Status-Container",
                 Element = { PreferredSize = { 0, containerHeight } },
                 Group =
                 {
@@ -165,43 +202,6 @@ namespace UseStorageBook
             container.Children.Add(statusContainer);
 
             #endregion 阅读进度设置
-
-            #region 真传/手抄设置
-
-            var typeContainer = new Container()
-            {
-                Name = $"{ModId}-Type-Content",
-                Element = { PreferredSize = { 0, containerHeight } },
-                Group =
-                {
-                    Direction = Direction.Horizontal,
-                    Spacing = 4
-                },
-                Children =
-                {
-                    new TaiwuLabel()
-                    {
-                        Name = "{ModId}-Type-Label",
-                        Text = "真传/手抄",
-                        Element = { PreferredSize = { labelWidth, 0 } },
-                        UseBoldFont = true,
-                        UseOutline = true,
-                    }
-                }
-            };
-            typeContainer.Children.AddRange(Settings.Type.Value
-                .Select((val, index) => (ManagedGameObject)new TaiwuToggle
-                {
-                    Name = $"{ModId}-Type-Toggle-{index}",
-                    Text = Settings.BookType[index],
-                    FontColor = Color.white,
-                    isOn = val,
-                    onValueChanged = (value, _) => Settings.TypeSet(index, value)
-                }));
-
-            container.Children.Add(typeContainer);
-
-            #endregion 真传/手抄设置
 
             #region 品级设置
 
@@ -299,7 +299,7 @@ namespace UseStorageBook
                         {
                             new TaiwuLabel
                             {
-                                Name = "{ModId}-GongFa-Label",
+                                Name = $"{ModId}-GongFa-Label",
                                 Text = "功法类型",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 UseBoldFont = true,
@@ -379,7 +379,7 @@ namespace UseStorageBook
                         {
                             new TaiwuLabel
                             {
-                                Name = "{ModId}-Sect-Label",
+                                Name = $"{ModId}-Sect-Label",
                                 Text = "门派",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 UseBoldFont = true,
@@ -443,6 +443,86 @@ namespace UseStorageBook
             #endregion 功法门派设置
 
             ModHelper.SettingUI = container;
+
+            #region 当设置变更时，同步更新设置界面UI
+
+            Settings.Source.SettingChanged += (s, e) =>
+            {
+                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Source-Container")
+                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Source-Toggle"))
+                    .Cast<TaiwuToggle>();
+                foreach (var toggle in toggles)
+                {
+                    var index = int.Parse(toggle.Name.Split('-').Last());
+                    toggle.isOn = Settings.Source.Value[index];
+                }
+            };
+
+            Settings.Type.SettingChanged += (s, e) =>
+            {
+                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Type-Container")
+                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Type-Toggle"))
+                    .Cast<TaiwuToggle>();
+                foreach (var toggle in toggles)
+                {
+                    var index = int.Parse(toggle.Name.Split('-').Last());
+                    toggle.isOn = Settings.Type.Value[index];
+                }
+            };
+
+            Settings.Status.SettingChanged += (s, e) =>
+            {
+                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Status-Container")
+                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Status-Toggle"))
+                    .Cast<TaiwuToggle>();
+                foreach (var toggle in toggles)
+                {
+                    var index = int.Parse(toggle.Name.Split('-').Last());
+                    toggle.isOn = Settings.Status.Value[index];
+                }
+            };
+
+            Settings.Level.SettingChanged += (s, e) =>
+            {
+                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Level-Container")
+                    .Children.Find(c => c.Name == $"{ModId}-Level-Content")
+                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Level-Toggle"))
+                    .Cast<TaiwuToggle>();
+                foreach (var toggle in toggles)
+                {
+                    var index = int.Parse(toggle.Name.Split('-').Last());
+                    toggle.isOn = Settings.Level.Value[index];
+                }
+            };
+
+            Settings.GongFa.SettingChanged += (s, e) =>
+            {
+                var toggles = container.Children.Find(c => c.Name == $"{ModId}-GongFa-Container")
+                    .Children.Find(c => c.Name == $"{ModId}-GongFa-Content")
+                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-GongFa-Toggle"))
+                    .Cast<TaiwuToggle>();
+                foreach (var toggle in toggles)
+                {
+                    var index = int.Parse(toggle.Name.Split('-').Last());
+                    toggle.isOn = Settings.GongFa.Value[index];
+                }
+            };
+
+            Settings.Sect.SettingChanged += (s, e) =>
+            {
+                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Sect-Container")
+                    .Children.Find(c => c.Name == $"{ModId}-Sect-Content")
+                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Sect-Content-Group"))
+                    .SelectMany(i => i.Children.Where(c => c.Name.StartsWith($"{ModId}-Sect-Toggle")))
+                    .Cast<TaiwuToggle>();
+                foreach (var toggle in toggles)
+                {
+                    var index = int.Parse(toggle.Name.Split('-').Last());
+                    toggle.isOn = Settings.Sect.Value[index];
+                }
+            };
+
+            #endregion
         }
 
         #region 品级
