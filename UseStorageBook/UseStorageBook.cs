@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaiwuUIKit.GameObjects;
 using UnityEngine;
@@ -23,7 +25,30 @@ namespace UseStorageBook
 
         public const string ModId = "TaiwuMod.plugins.UseStorageBook";
         public const string ModName = "使用仓库中的书";
-        public const string ModVersion = "1.4.1";
+        public const string ModVersion = "1.4.2";
+
+        #region 控件名称设置
+
+        private readonly string _settingUIContainerName = $"{ModId}.Container";
+        private readonly string _enableContainerName = $"{ModId}.Enable.Container";
+        private readonly string _enableContainerToggleName = $"{ModId}.Enable.Toggle";
+        private readonly string _sourceContainerName = $"{ModId}.Source.Container";
+        private readonly string _sourceContainerToggleNamePrefix = $"{ModId}.Source.Toggle";
+        private readonly string _typeContainerName = $"{ModId}.Type.Container";
+        private readonly string _typeContainerToggleNamePrefix = $"{ModId}.Type.Toggle";
+        private readonly string _statusContainerName = $"{ModId}.Status.Container";
+        private readonly string _statusContainerToggleNamePrefix = $"{ModId}.Status.Toggle";
+        private readonly string _levelContainerName = $"{ModId}.Level.Container";
+        private readonly string _levelContainerAllToggleName = $"{ModId}.Level.All.Toggle";
+        private readonly string _levelContainerToggleNamePrefix = $"{ModId}.Level.Toggle";
+        private readonly string _gongfaContainerName = $"{ModId}.GongFa.Container";
+        private readonly string _gongfaContainerAllToggleName = $"{ModId}.GongFa.All.Toggle";
+        private readonly string _gongfaContainerToggleNamePrefix = $"{ModId}.GongFa.Toggle";
+        private readonly string _sectContainerName = $"{ModId}.Sect.Container";
+        private readonly string _sectContainerAllToggleName = $"{ModId}.Sect.All.Toggle";
+        private readonly string _sectContainerToggleNamePrefix = $"{ModId}.Sect.Toggle";
+
+        #endregion
 
         public void Awake()
         {
@@ -31,12 +56,12 @@ namespace UseStorageBook
             Settings = new Settings();
             Settings.Init(Config);
             new Harmony(ModId).PatchAll();
-            ModHelper = new ModHelper(ModId, $"{ModName}-{ModVersion}");
+            ModHelper = new ModHelper(ModId, $"{ModName}.{ModVersion}");
             ModLogger = base.Logger;
 
             var container = new BoxAutoSizeModelGameObject
             {
-                Name = $"{ModId}.Container"
+                Name = _settingUIContainerName
             };
             container.Group.Direction = Direction.Vertical;
             container.Group.Spacing = 5;
@@ -49,7 +74,7 @@ namespace UseStorageBook
 
             var enableContainer = new Container
             {
-                Name = $"{ModId}-Enable",
+                Name = _enableContainerName,
                 Element = { PreferredSize = { 0, containerHeight } },
                 Group =
                 {
@@ -60,7 +85,7 @@ namespace UseStorageBook
                 {
                     new TaiwuLabel()
                     {
-                        Name = "{ModId}-Enable-Label",
+                        Name = $"{_enableContainerName}.Label",
                         Text = "Mod开关",
                         Element = { PreferredSize = { labelWidth, 0 } },
                         UseBoldFont = true,
@@ -68,7 +93,7 @@ namespace UseStorageBook
                     },
                     new TaiwuToggle
                     {
-                        Name = $"{ModId}-Enable-Toggle",
+                        Name = _enableContainerToggleName,
                         Text = Settings.Enabled.Value ? "开" : "关",
                         FontColor = Color.white,
                         isOn = Settings.Enabled.Value,
@@ -96,7 +121,7 @@ namespace UseStorageBook
 
             var sourceContainer = new Container()
             {
-                Name = $"{ModId}-Source-Container",
+                Name = _sourceContainerName,
                 Element = { PreferredSize = { 0, containerHeight } },
                 Group =
                 {
@@ -107,7 +132,7 @@ namespace UseStorageBook
                 {
                     new TaiwuLabel
                     {
-                        Name = $"{ModId}-Source-Label",
+                        Name = $"{_sourceContainerName}.Label",
                         Text = "背包/仓库",
                         Element = { PreferredSize = { labelWidth, 0 } },
                         UseBoldFont = true,
@@ -118,7 +143,7 @@ namespace UseStorageBook
             sourceContainer.Children.AddRange(Settings.Source.Value
                 .Select((val, index) => (ManagedGameObject)new TaiwuToggle
                 {
-                    Name = $"{ModId}-Source-Toggle-{index}",
+                    Name = $"{_sourceContainerToggleNamePrefix}.{index}",
                     Text = Settings.BookSource[index],
                     FontColor = Color.white,
                     isOn = val,
@@ -133,7 +158,7 @@ namespace UseStorageBook
 
             var typeContainer = new Container()
             {
-                Name = $"{ModId}-Type-Container",
+                Name = _typeContainerName,
                 Element = { PreferredSize = { 0, containerHeight } },
                 Group =
                 {
@@ -144,7 +169,7 @@ namespace UseStorageBook
                 {
                     new TaiwuLabel()
                     {
-                        Name = $"{ModId}-Type-Label",
+                        Name = $"{_typeContainerName}.Label",
                         Text = "真传/手抄",
                         Element = { PreferredSize = { labelWidth, 0 } },
                         UseBoldFont = true,
@@ -155,7 +180,7 @@ namespace UseStorageBook
             typeContainer.Children.AddRange(Settings.Type.Value
                 .Select((val, index) => (ManagedGameObject)new TaiwuToggle
                 {
-                    Name = $"{ModId}-Type-Toggle-{index}",
+                    Name = $"{_typeContainerToggleNamePrefix}.{index}",
                     Text = Settings.BookType[index],
                     FontColor = Color.white,
                     isOn = val,
@@ -170,7 +195,7 @@ namespace UseStorageBook
 
             var statusContainer = new Container()
             {
-                Name = $"{ModId}-Status-Container",
+                Name = _statusContainerName,
                 Element = { PreferredSize = { 0, containerHeight } },
                 Group =
                 {
@@ -181,7 +206,7 @@ namespace UseStorageBook
                 {
                     new TaiwuLabel()
                     {
-                        Name = "{ModId}-Status-Label",
+                        Name = $"{_statusContainerName}.Label",
                         Text = "阅读进度",
                         Element = { PreferredSize = { labelWidth, 0 } },
                         UseBoldFont = true,
@@ -192,7 +217,7 @@ namespace UseStorageBook
             statusContainer.Children.AddRange(Settings.Status.Value
                 .Select((val, index) => (ManagedGameObject)new TaiwuToggle
                 {
-                    Name = $"{ModId}-Status-Toggle-{index}",
+                    Name = $"{_statusContainerToggleNamePrefix}.{index}",
                     Text = Settings.ReadStatus[index],
                     FontColor = Color.white,
                     isOn = val,
@@ -207,7 +232,7 @@ namespace UseStorageBook
 
             var levelContainer = new BoxAutoSizeModelGameObject()
             {
-                Name = $"{ModId}-Level-Container",
+                Name = _levelContainerName,
                 Group =
                 {
                     Direction = Direction.Vertical,
@@ -218,7 +243,7 @@ namespace UseStorageBook
                 {
                     new Container
                     {
-                        Name = $"{ModId}-Level-Title",
+                        Name = $"{_levelContainerName}.Title",
                         Element = { PreferredSize = { 0, containerHeight } },
                         Group =
                         {
@@ -229,7 +254,7 @@ namespace UseStorageBook
                         {
                             new TaiwuLabel
                             {
-                                Name = "{ModId}-Level-Label",
+                                Name = $"{_levelContainerName}.Title.Label",
                                 Text = "品级",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 UseBoldFont = true,
@@ -237,18 +262,18 @@ namespace UseStorageBook
                             },
                             new TaiwuToggle
                             {
-                                Name = $"{ModId}-Level-Switch",
+                                Name = _levelContainerAllToggleName,
                                 Text = "全选",
                                 Element = { PreferredSize = { selectAllWidth, containerHeight } },
                                 FontColor = Color.white,
                                 isOn = Settings.Level.Value.All(i => i),
-                                onValueChanged = BookLevelSelectAllChanged
+                                onValueChanged = LevelSelectAllChanged
                             }
                         }
                     },
                     new Container
                     {
-                        Name = $"{ModId}-Level-Content",
+                        Name = $"{_levelContainerName}.Content",
                         Element = { PreferredSize = { 0, containerHeight } },
                         Group =
                         {
@@ -258,11 +283,11 @@ namespace UseStorageBook
                         Children = Settings.Level.Value
                             .Select((val, index) => (ManagedGameObject)new TaiwuToggle
                             {
-                                Name = $"{ModId}-Level-Toggle-{index}",
+                                Name = $"{_levelContainerToggleNamePrefix}.{index}",
                                 Text = Settings.BookLevel[index],
                                 FontColor = Color.white,
                                 isOn = val,
-                                onValueChanged = BookLevelSelectionChanged
+                                onValueChanged = LevelSelectionChanged
                             })
                             .ToList()
                     }
@@ -277,7 +302,7 @@ namespace UseStorageBook
 
             var gongfaContainer = new BoxAutoSizeModelGameObject()
             {
-                Name = $"{ModId}-GongFa-Container",
+                Name = _gongfaContainerName,
                 Group =
                 {
                     Direction = Direction.Vertical,
@@ -288,7 +313,7 @@ namespace UseStorageBook
                 {
                     new Container
                     {
-                        Name = $"{ModId}-GongFa-Title",
+                        Name = $"{_gongfaContainerName}.Title",
                         Element = { PreferredSize = { 0, containerHeight } },
                         Group =
                         {
@@ -299,7 +324,7 @@ namespace UseStorageBook
                         {
                             new TaiwuLabel
                             {
-                                Name = $"{ModId}-GongFa-Label",
+                                Name = $"{_gongfaContainerName}.Title.Label",
                                 Text = "功法类型",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 UseBoldFont = true,
@@ -307,18 +332,18 @@ namespace UseStorageBook
                             },
                             new TaiwuToggle
                             {
-                                Name = $"{ModId}-GongFa-Switch",
+                                Name = _gongfaContainerAllToggleName,
                                 Text = "全选",
                                 Element = { PreferredSize = { selectAllWidth, containerHeight } },
                                 FontColor = Color.white,
                                 isOn = Settings.GongFa.Value.All(i => i),
-                                onValueChanged = BookGongFaSelectAllChanged
+                                onValueChanged = GongFaSelectAllChanged
                             }
                         }
                     },
                     new Container
                     {
-                        Name = $"{ModId}-GongFa-Content",
+                        Name = $"{_gongfaContainerName}.Content",
                         Element = { PreferredSize = { 0, containerHeight } },
                         Group =
                         {
@@ -328,11 +353,11 @@ namespace UseStorageBook
                         Children = Settings.GongFa.Value
                             .Select((val, index) => (ManagedGameObject)new TaiwuToggle
                             {
-                                Name = $"{ModId}-GongFa-Toggle-{index}",
+                                Name = $"{_gongfaContainerToggleNamePrefix}.{index}",
                                 Text = Settings.BookGongFa[index],
                                 FontColor = Color.white,
                                 isOn = val,
-                                onValueChanged = BookGongFaSelectionChanged
+                                onValueChanged = GongFaSelectionChanged
                             })
                             .ToList()
                     }
@@ -348,16 +373,16 @@ namespace UseStorageBook
             var sectToggles = Settings.Sect.Value
                 .Select((val, index) => (ManagedGameObject)new TaiwuToggle
                 {
-                    Name = $"{ModId}-Sect-Toggle-{index}",
+                    Name = $"{_sectContainerToggleNamePrefix}.{index}",
                     Text = Settings.BookSect[index],
                     FontColor = Color.white,
                     isOn = val,
-                    onValueChanged = BookSectSelectionChanged
+                    onValueChanged = SectSelectionChanged
                 });
 
             var sectContainer = new BoxAutoSizeModelGameObject()
             {
-                Name = $"{ModId}-Sect-Container",
+                Name = _sectContainerName,
                 Group =
                 {
                     Direction = Direction.Vertical,
@@ -368,7 +393,7 @@ namespace UseStorageBook
                 {
                     new Container
                     {
-                        Name = $"{ModId}-Sect-Title",
+                        Name = $"{_sectContainerName}.Title",
                         Element = { PreferredSize = { 0, containerHeight } },
                         Group =
                         {
@@ -379,7 +404,7 @@ namespace UseStorageBook
                         {
                             new TaiwuLabel
                             {
-                                Name = $"{ModId}-Sect-Label",
+                                Name = $"{_sectContainerName}.Title.Label",
                                 Text = "门派",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 UseBoldFont = true,
@@ -387,18 +412,18 @@ namespace UseStorageBook
                             },
                             new TaiwuToggle
                             {
-                                Name = $"{ModId}-Sect-Switch",
+                                Name = _sectContainerAllToggleName,
                                 Text = "全选",
                                 Element = { PreferredSize = { selectAllWidth, containerHeight } },
                                 FontColor = Color.white,
                                 isOn = Settings.Sect.Value.All(i => i),
-                                onValueChanged = BookSectSelectAllChanged
+                                onValueChanged = SectSelectAllChanged
                             }
                         }
                     },
                     new Container
                     {
-                        Name = $"{ModId}-Sect-Content",
+                        Name = $"{_sectContainerName}.Content",
                         Element = { PreferredSize = { 0, containerHeight * 2 } },
                         Group =
                         {
@@ -409,7 +434,7 @@ namespace UseStorageBook
                         {
                             new Container
                             {
-                                Name = $"{ModId}-Sect-Content-Group1",
+                                Name = $"{_sectContainerName}.Content.Group1",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 Group =
                                 {
@@ -422,7 +447,7 @@ namespace UseStorageBook
                             },
                             new Container
                             {
-                                Name = $"{ModId}-Sect-Content-Group2",
+                                Name = $"{_sectContainerName}.Content.Group2",
                                 Element = { PreferredSize = { 0, containerHeight } },
                                 Group =
                                 {
@@ -448,100 +473,57 @@ namespace UseStorageBook
 
             Settings.Source.SettingChanged += (s, e) =>
             {
-                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Source-Container")
-                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Source-Toggle"))
-                    .Cast<TaiwuToggle>();
-                foreach (var toggle in toggles)
-                {
-                    var index = int.Parse(toggle.Name.Split('-').Last());
-                    toggle.isOn = Settings.Source.Value[index];
-                }
+                var toggles = SearchToggleElements(container, _sourceContainerToggleNamePrefix);
+                SetTogglesValue(toggles, Settings.Source.Value);
             };
 
             Settings.Type.SettingChanged += (s, e) =>
             {
-                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Type-Container")
-                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Type-Toggle"))
-                    .Cast<TaiwuToggle>();
-                foreach (var toggle in toggles)
-                {
-                    var index = int.Parse(toggle.Name.Split('-').Last());
-                    toggle.isOn = Settings.Type.Value[index];
-                }
+                var toggles = SearchToggleElements(container, _typeContainerToggleNamePrefix);
+                SetTogglesValue(toggles, Settings.Type.Value);
             };
 
             Settings.Status.SettingChanged += (s, e) =>
             {
-                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Status-Container")
-                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Status-Toggle"))
-                    .Cast<TaiwuToggle>();
-                foreach (var toggle in toggles)
-                {
-                    var index = int.Parse(toggle.Name.Split('-').Last());
-                    toggle.isOn = Settings.Status.Value[index];
-                }
+                var toggles = SearchToggleElements(container, _statusContainerToggleNamePrefix);
+                SetTogglesValue(toggles, Settings.Status.Value);
             };
 
             Settings.Level.SettingChanged += (s, e) =>
             {
-                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Level-Container")
-                    .Children.Find(c => c.Name == $"{ModId}-Level-Content")
-                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Level-Toggle"))
-                    .Cast<TaiwuToggle>();
-                foreach (var toggle in toggles)
-                {
-                    var index = int.Parse(toggle.Name.Split('-').Last());
-                    toggle.isOn = Settings.Level.Value[index];
-                }
+                var toggles = SearchToggleElements(container, _levelContainerToggleNamePrefix);
+                SetTogglesValue(toggles, Settings.Level.Value);
             };
 
             Settings.GongFa.SettingChanged += (s, e) =>
             {
-                var toggles = container.Children.Find(c => c.Name == $"{ModId}-GongFa-Container")
-                    .Children.Find(c => c.Name == $"{ModId}-GongFa-Content")
-                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-GongFa-Toggle"))
-                    .Cast<TaiwuToggle>();
-                foreach (var toggle in toggles)
-                {
-                    var index = int.Parse(toggle.Name.Split('-').Last());
-                    toggle.isOn = Settings.GongFa.Value[index];
-                }
+                var toggles = SearchToggleElements(container, _gongfaContainerToggleNamePrefix);
+                SetTogglesValue(toggles, Settings.GongFa.Value);
             };
 
             Settings.Sect.SettingChanged += (s, e) =>
             {
-                var toggles = container.Children.Find(c => c.Name == $"{ModId}-Sect-Container")
-                    .Children.Find(c => c.Name == $"{ModId}-Sect-Content")
-                    .Children.FindAll(c => c.Name.StartsWith($"{ModId}-Sect-Content-Group"))
-                    .SelectMany(i => i.Children.Where(c => c.Name.StartsWith($"{ModId}-Sect-Toggle")))
-                    .Cast<TaiwuToggle>();
-                foreach (var toggle in toggles)
-                {
-                    var index = int.Parse(toggle.Name.Split('-').Last());
-                    toggle.isOn = Settings.Sect.Value[index];
-                }
+                var toggles = SearchToggleElements(container, _sectContainerToggleNamePrefix);
+                SetTogglesValue(toggles, Settings.Sect.Value);
             };
 
             #endregion
         }
 
-        #region 品级
+        #region 品级全选及选中事件方法
 
         /// <summary>
         /// 书本品级全选
         /// </summary>
         /// <param name="value">值</param>
         /// <param name="toggle">开关元素</param>
-        private void BookLevelSelectAllChanged(bool value, Toggle toggle)
+        private void LevelSelectAllChanged(bool value, Toggle toggle)
         {
-            foreach (var child in toggle.Parent.Parent.Children.Find(c => c.Name == $"{ModId}-Level-Content")?.Children)
+            foreach (var tg in SearchToggleElements(toggle.Parent.Parent, _levelContainerToggleNamePrefix))
             {
-                if (child is TaiwuToggle t)
-                {
-                    t.onValueChanged -= BookLevelSelectionChanged;
-                    t.isOn = value;
-                    t.onValueChanged += BookLevelSelectionChanged;
-                }
+                tg.onValueChanged -= LevelSelectionChanged;
+                tg.isOn = value;
+                tg.onValueChanged += LevelSelectionChanged;
             }
             Settings.LevelSetAll(value);
         }
@@ -551,40 +533,35 @@ namespace UseStorageBook
         /// </summary>
         /// <param name="value">值</param>
         /// <param name="toggle">开关元素</param>
-        private void BookLevelSelectionChanged(bool value, Toggle toggle)
+        private void LevelSelectionChanged(bool value, Toggle toggle)
         {
-            var index = int.Parse(toggle.Name.Split('-').Last());
+            var index = int.Parse(toggle.Name.Split('.').Last());
             Settings.LevelSet(index, value);
-            var el = toggle.Parent.Parent.Children
-                .Find(c => c.Name == $"{ModId}-Level-Title")
-                .Children.Find(c => c.Name == $"{ModId}-Level-Switch");
-            if (el is TaiwuToggle t)
+            var tg = SearchToggleElements(toggle.Parent.Parent, _levelContainerAllToggleName).SingleOrDefault();
+            if (tg != null)
             {
-                t.onValueChanged -= BookLevelSelectAllChanged;
-                t.isOn = Settings.Level.Value.All(i => i);
-                t.onValueChanged += BookLevelSelectAllChanged;
+                tg.onValueChanged -= LevelSelectAllChanged;
+                tg.isOn = Settings.Level.Value.All(i => i);
+                tg.onValueChanged += LevelSelectAllChanged;
             }
         }
 
         #endregion
 
-        #region 功法类型
+        #region 功法类型全选及选中事件方法
 
         /// <summary>
         /// 功法类型全选
         /// </summary>
         /// <param name="value">值</param>
         /// <param name="toggle">开关元素</param>
-        private void BookGongFaSelectAllChanged(bool value, Toggle toggle)
+        private void GongFaSelectAllChanged(bool value, Toggle toggle)
         {
-            foreach (var child in toggle.Parent.Parent.Children.Find(c => c.Name == $"{ModId}-GongFa-Content")?.Children)
+            foreach (var tg in SearchToggleElements(toggle.Parent.Parent, _gongfaContainerToggleNamePrefix))
             {
-                if (child is TaiwuToggle t)
-                {
-                    t.onValueChanged -= BookGongFaSelectionChanged;
-                    t.isOn = value;
-                    t.onValueChanged += BookGongFaSelectionChanged;
-                }
+                tg.onValueChanged -= GongFaSelectionChanged;
+                tg.isOn = value;
+                tg.onValueChanged += GongFaSelectionChanged;
             }
             Settings.GongFaSetAll(value);
         }
@@ -594,42 +571,35 @@ namespace UseStorageBook
         /// </summary>
         /// <param name="value">值</param>
         /// <param name="toggle">开关元素</param>
-        private void BookGongFaSelectionChanged(bool value, Toggle toggle)
+        private void GongFaSelectionChanged(bool value, Toggle toggle)
         {
-            var index = int.Parse(toggle.Name.Split('-').Last());
+            var index = int.Parse(toggle.Name.Split('.').Last());
             Settings.GongFaSet(index, value);
-            var el = toggle.Parent.Parent.Children
-                .Find(c => c.Name == $"{ModId}-GongFa-Title")
-                .Children.Find(c => c.Name == $"{ModId}-GongFa-Switch");
-            if (el is TaiwuToggle t)
+            var tg = SearchToggleElements(toggle.Parent.Parent, _gongfaContainerAllToggleName).SingleOrDefault();
+            if (tg != null)
             {
-                t.onValueChanged -= BookGongFaSelectAllChanged;
-                t.isOn = Settings.GongFa.Value.All(i => i);
-                t.onValueChanged += BookGongFaSelectAllChanged;
+                tg.onValueChanged -= GongFaSelectAllChanged;
+                tg.isOn = Settings.GongFa.Value.All(i => i);
+                tg.onValueChanged += GongFaSelectAllChanged;
             }
         }
 
         #endregion
 
-        #region 门派
+        #region 门派全选及选中事件方法
 
         /// <summary>
         /// 门派全选
         /// </summary>
         /// <param name="value">值</param>
         /// <param name="toggle">开关元素</param>
-        private void BookSectSelectAllChanged(bool value, Toggle toggle)
+        private void SectSelectAllChanged(bool value, Toggle toggle)
         {
-            foreach (var child in toggle.Parent.Parent.Children
-                .Find(c => c.Name == $"{ModId}-Sect-Content")?.Children
-                .SelectMany(c => c.Children))
+            foreach (var tg in SearchToggleElements(toggle.Parent.Parent, _sectContainerToggleNamePrefix))
             {
-                if (child is TaiwuToggle t)
-                {
-                    t.onValueChanged -= BookSectSelectionChanged;
-                    t.isOn = value;
-                    t.onValueChanged += BookSectSelectionChanged;
-                }
+                tg.onValueChanged -= SectSelectionChanged;
+                tg.isOn = value;
+                tg.onValueChanged += SectSelectionChanged;
             }
             Settings.SectSetAll(value);
         }
@@ -639,18 +609,69 @@ namespace UseStorageBook
         /// </summary>
         /// <param name="value">值</param>
         /// <param name="toggle">开关元素</param>
-        private void BookSectSelectionChanged(bool value, Toggle toggle)
+        private void SectSelectionChanged(bool value, Toggle toggle)
         {
-            var index = int.Parse(toggle.Name.Split('-').Last());
+            var index = int.Parse(toggle.Name.Split('.').Last());
             Settings.SectSet(index, value);
-            var el = toggle.Parent.Parent.Parent.Children
-                .Find(c => c.Name == $"{ModId}-Sect-Title")
-                .Children.Find(c => c.Name == $"{ModId}-Sect-Switch");
-            if (el is TaiwuToggle t)
+            var tg = SearchToggleElements(toggle.Parent.Parent.Parent, _sectContainerAllToggleName).SingleOrDefault();
+            if (tg != null)
             {
-                t.onValueChanged -= BookSectSelectAllChanged;
-                t.isOn = Settings.Sect.Value.All(i => i);
-                t.onValueChanged += BookSectSelectAllChanged;
+                tg.onValueChanged -= SectSelectAllChanged;
+                tg.isOn = Settings.Sect.Value.All(i => i);
+                tg.onValueChanged += SectSelectAllChanged;
+            }
+        }
+
+        #endregion
+
+        #region 私有方法
+
+        /// <summary>
+        /// 给TaiwuToggle集合赋值
+        /// </summary>
+        /// <param name="toggles">Toggles</param>
+        /// <param name="values">值</param>
+        private void SetTogglesValue(IEnumerable<TaiwuToggle> toggles, bool[] values)
+        {
+            foreach (var toggle in toggles)
+            {
+                // 获取索引，判断索引超出数组长度，Toggle的值是否发生变化
+                if (int.TryParse(toggle.Name.Split('.').Last(), out var index) && index < values.Length && toggle.isOn != values[index])
+                {
+                    toggle.isOn = values[index];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 搜索父级元素下的所有
+        /// </summary>
+        /// <param name="parent">父级元素</param>
+        /// <param name="namePrefix">Toggle控件名前缀</param>
+        /// <param name="comparison">比较方式，默认忽略大小写</param>
+        /// <returns>符合条件的Toggle集合</returns>
+        private IEnumerable<TaiwuToggle> SearchToggleElements(ManagedGameObject parent, string namePrefix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            foreach (var child in parent.Children)
+            {
+                if (child is Container container)
+                {
+                    foreach (var item in SearchToggleElements(container, namePrefix))
+                    {
+                        yield return item;
+                    }
+                }
+                else if(child is BoxAutoSizeModelGameObject box)
+                {
+                    foreach (var item in SearchToggleElements(box, namePrefix))
+                    {
+                        yield return item;
+                    }
+                }
+                else if(child is TaiwuToggle toggle && toggle.Name.StartsWith(namePrefix, comparison))
+                {
+                    yield return toggle;
+                }
             }
         }
 

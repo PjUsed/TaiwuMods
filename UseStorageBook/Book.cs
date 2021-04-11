@@ -27,7 +27,7 @@ namespace UseStorageBook
 
         /// <summary>
         /// 物品类型
-        /// <para>17为技艺书籍</para>
+        /// <para>大于等于17为功法书籍</para>
         /// </summary>
         public int ItemType { get; set; }
 
@@ -62,19 +62,19 @@ namespace UseStorageBook
         /// <param name="source">来源：0背包，1仓库</param>
         public Book(int id, int source = 0)
         {
-            Id = id;
-            Source = source;
             var df = DateFile.instance;
             var itemId = int.Parse(df.GetItemDate(id, 999));
-            var gongFaId = 0;
-            if(BuildingWindow.instance.studySkillTyp >= 17)
-                gongFaId = int.Parse(df.presetitemDate[itemId][32]);
-            Level = int.Parse(df.presetitemDate[itemId][8]) - 1;
-            ItemType = int.Parse(df.presetitemDate[itemId][31]);
-            var pages = BuildingWindow.instance.studySkillTyp >= 17
+            var gongFaId = int.Parse(df.presetitemDate[itemId][32]);
+            var readPages = BuildingWindow.instance.studySkillTyp >= 17
                 ? (df.gongFaBookPages.ContainsKey(gongFaId) ? df.gongFaBookPages[gongFaId].Sum() : 0)
                 : (df.skillBookPages.ContainsKey(gongFaId) ? df.skillBookPages[gongFaId].Sum() : 0);
-            ReadStatus = pages <= 0 ? 0 : pages < 10 ? 1 : 2;
+
+            Id = id;
+            Source = source;
+            Level = int.Parse(df.presetitemDate[itemId][8]) - 1;
+            ItemType = int.Parse(df.presetitemDate[itemId][31]);
+            ReadStatus = readPages <= 0 ? 0 : readPages < 10 ? 1 : 2;
+
             if (BuildingWindow.instance.studySkillTyp >= 17)
             {
                 Type = int.Parse(df.presetitemDate[itemId][35]) != 1 ? 0 : 1;

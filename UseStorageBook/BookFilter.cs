@@ -48,7 +48,7 @@ namespace UseStorageBook
                 {
                     _obj = new GameObject($"TaiwuMod.plugins.{UseStorageBook.ModId}.{nameof(BookFilter)}", typeof(BookFilter));
                     DontDestroyOnLoad(_obj);
-                    UseStorageBook.ModLogger.LogInfo($"Create {nameof(BookFilter)} UI");
+                    UseStorageBook.ModLogger.LogMessage($"Create {nameof(BookFilter)} UI");
                 }
             }
             catch (Exception)

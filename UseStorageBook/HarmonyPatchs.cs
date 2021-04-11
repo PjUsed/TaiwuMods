@@ -17,7 +17,7 @@ namespace UseStorageBook
             if (!UseStorageBook.IsEnable)
                 return true;
 
-            UseStorageBook.ModLogger.LogInfo("加载书籍...");
+            UseStorageBook.ModLogger.LogMessage("Load books...");
             var books = Book.GetAllBooks().Where(x => x.IsMatch(UseStorageBook.Settings)).ToList();
 
             SetBook(books);
