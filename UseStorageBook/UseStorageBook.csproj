@@ -110,4 +110,10 @@
     <Compile Include="UseStorageBook.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(SolutionDir)build\$(ProjectName)" mkdir "$(SolutionDir)build\$(ProjectName)"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)build\$(ProjectName)" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
