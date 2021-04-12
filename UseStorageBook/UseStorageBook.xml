@@ -1,0 +1,401 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UseStorageBook</name>
+    </assembly>
+    <members>
+        <member name="T:UseStorageBook.Book">
+            <summary>
+            书本
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.Source">
+            <summary>
+            来源：0背包，1仓库
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.Level">
+            <summary>
+            品级
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.ItemType">
+            <summary>
+            物品类型
+            <para>大于等于17为功法书籍</para>
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.ReadStatus">
+            <summary>
+            阅读状态：0未读，1已读，2读完
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.Type">
+            <summary>
+            类型：0真传，1手抄
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.GongFaType">
+            <summary>
+            功法类型
+            </summary>
+        </member>
+        <member name="P:UseStorageBook.Book.Sect">
+            <summary>
+            门派
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.Book.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造函数，初始化书本
+            </summary>
+            <param name="id">Id</param>
+            <param name="source">来源：0背包，1仓库</param>
+        </member>
+        <member name="M:UseStorageBook.Book.IsMatch(UseStorageBook.Settings)">
+            <summary>
+            是否符合设置
+            </summary>
+            <param name="settings">设置</param>
+            <returns>true为符合，false相反</returns>
+        </member>
+        <member name="M:UseStorageBook.Book.GetAllBooks">
+            <summary>
+            获取所有书籍
+            </summary>
+            <returns>书籍列表</returns>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.Load">
+            <summary>
+            加载
+            </summary>
+            <returns>true为加载成功，false相反</returns>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.WindowFunc(System.Int32)">
+            <summary>
+            窗口设置
+            <para>该窗口会一直保持刷新（只要显示了就一直被调用）</para>
+            </summary>
+            <param name="windowId">窗口Id</param>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.PrepareGUIStyle">
+            <summary>
+            设置UI控件样式
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.ShowMenu">
+            <summary>
+            打开书本过滤
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.CloseMenu">
+            <summary>
+            关闭书本过滤
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.BlockGameUI(System.Boolean)">
+            <summary>
+            暂时阻断游戏UI
+            </summary>
+            <param name="open">此界面是否打开</param>
+        </member>
+        <member name="M:UseStorageBook.BookFilter.SettingsChanged">
+            <summary>
+            筛选条件变更
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BuildingWindow_SetBook_Patch.Prefix">
+            <summary>
+            重写SetBook方法
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BuildingWindow_SetBook_Patch.SetBook(System.Collections.Generic.List{UseStorageBook.Book})">
+            <summary>
+            设置书籍, 用于替换原始方法
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BuildingWindow_SetChooseBookWindow_Patch.Postfix">
+            <summary>
+            设置并显示筛选界面UI
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.BuildingWindow_CloseBookWindow_Patch.Postfix">
+            <summary>
+            关闭筛选界面UI
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.ReadBook_CloseReadBook_Patch.Prefix">
+            <summary>
+            仓库中的书耐久为0时将其移除
+            </summary>
+        </member>
+        <member name="T:UseStorageBook.WindowsManage_ShowBookMassage_Patch">
+            <summary>
+            解决鼠标放在书本上不显示仓库中书上时，不显示仓库中书的阅读状态的BUG
+            （暂时将书加入背包）
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.WindowsManage_ShowBookMassage_Patch.Prefix(System.Int32@,System.Int32@)">
+            <summary>
+            记录当前书的id，并将仓库中的书暂时加入背包
+            </summary>
+            <param name="itemId"></param>
+            <param name="__state"></param>
+        </member>
+        <member name="M:UseStorageBook.WindowsManage_ShowBookMassage_Patch.Postfix(System.Int32@)">
+            <summary>
+            将书从背包中移除
+            </summary>
+            <param name="__state"></param>
+        </member>
+        <member name="T:UseStorageBook.Settings">
+            <summary>
+            设置
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.BookSource">
+            <summary>
+            书本来源
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.BookType">
+            <summary>
+            书本类型
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.ReadStatus">
+            <summary>
+            阅读进度
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.BookLevel">
+            <summary>
+            书本品级
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.BookGongFa">
+            <summary>
+            书本功法
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.BookSect">
+            <summary>
+            书本门派
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.Enabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.Source">
+            <summary>
+            来源，背包或仓库
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.Status">
+            <summary>
+            阅读进度
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.Type">
+            <summary>
+            类型，真传或手抄
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.Level">
+            <summary>
+            品级，九至一品
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.GongFa">
+            <summary>
+            功法类型，内功、身法、绝技...
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.Settings.Sect">
+            <summary>
+            门派
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.Settings.Init(BepInEx.Configuration.ConfigFile)">
+            <summary>
+            初始化设置
+            </summary>
+            <param name="config">持久化配置文件</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.LevelSetAll(System.Boolean)">
+            <summary>
+            设置所有品级
+            </summary>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.GongFaSetAll(System.Boolean)">
+            <summary>
+            设置所有功法类型
+            </summary>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.SectSetAll(System.Boolean)">
+            <summary>
+            设置所有门派
+            </summary>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.SourceSet(System.Int32,System.Boolean)">
+            <summary>
+            设置背包/仓库的值
+            </summary>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.TypeSet(System.Int32,System.Boolean)">
+            <summary>
+            设置真传/手抄的值
+            </summary>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.StatusSet(System.Int32,System.Boolean)">
+            <summary>
+            设置阅读进度的值
+            </summary>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.LevelSet(System.Int32,System.Boolean)">
+            <summary>
+            设置品级的值
+            </summary>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.GongFaSet(System.Int32,System.Boolean)">
+            <summary>
+            设置功法类型的值
+            </summary>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.SectSet(System.Int32,System.Boolean)">
+            <summary>
+            设置门派的值
+            </summary>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="M:UseStorageBook.Settings.SetArraySetting``1(BepInEx.Configuration.ConfigEntry{``0[]},System.Int32,``0)">
+            <summary>
+            设置数组设置
+            <para>配置文件设置为引用类型时，修改内部的值不会触发保存，此处重新给设置赋值</para>
+            </summary>
+            <typeparam name="T">数组类型</typeparam>
+            <param name="entry">数组设置</param>
+            <param name="index">索引</param>
+            <param name="value">值</param>
+        </member>
+        <member name="T:UseStorageBook.SettingType">
+            <summary>
+            设置类型
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.Enabled">
+            <summary>
+            启用/禁用
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.Source">
+            <summary>
+            背包/仓库
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.Type">
+            <summary>
+            真传/手抄
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.Status">
+            <summary>
+            阅读进度
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.Level">
+            <summary>
+            品级
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.GongFa">
+            <summary>
+            功法类型
+            </summary>
+        </member>
+        <member name="F:UseStorageBook.SettingType.Sect">
+            <summary>
+            门派
+            </summary>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.LevelSelectAllChanged(System.Boolean,UnityUIKit.GameObjects.Toggle)">
+            <summary>
+            书本品级全选
+            </summary>
+            <param name="value">值</param>
+            <param name="toggle">开关元素</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.LevelSelectionChanged(System.Boolean,UnityUIKit.GameObjects.Toggle)">
+            <summary>
+            书本品级选择
+            </summary>
+            <param name="value">值</param>
+            <param name="toggle">开关元素</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.GongFaSelectAllChanged(System.Boolean,UnityUIKit.GameObjects.Toggle)">
+            <summary>
+            功法类型全选
+            </summary>
+            <param name="value">值</param>
+            <param name="toggle">开关元素</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.GongFaSelectionChanged(System.Boolean,UnityUIKit.GameObjects.Toggle)">
+            <summary>
+            功法类型选择
+            </summary>
+            <param name="value">值</param>
+            <param name="toggle">开关元素</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.SectSelectAllChanged(System.Boolean,UnityUIKit.GameObjects.Toggle)">
+            <summary>
+            门派全选
+            </summary>
+            <param name="value">值</param>
+            <param name="toggle">开关元素</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.SectSelectionChanged(System.Boolean,UnityUIKit.GameObjects.Toggle)">
+            <summary>
+            门派选择
+            </summary>
+            <param name="value">值</param>
+            <param name="toggle">开关元素</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.SetTogglesValue(System.Collections.Generic.IEnumerable{TaiwuUIKit.GameObjects.TaiwuToggle},System.Boolean[])">
+            <summary>
+            给TaiwuToggle集合赋值
+            </summary>
+            <param name="toggles">Toggles</param>
+            <param name="values">值</param>
+        </member>
+        <member name="M:UseStorageBook.UseStorageBook.SearchToggleElements(UnityUIKit.Core.ManagedGameObject,System.String,System.StringComparison)">
+            <summary>
+            搜索父级元素下的所有
+            </summary>
+            <param name="parent">父级元素</param>
+            <param name="namePrefix">Toggle控件名前缀</param>
+            <param name="comparison">比较方式，默认忽略大小写</param>
+            <returns>符合条件的Toggle集合</returns>
+        </member>
+    </members>
+</doc>

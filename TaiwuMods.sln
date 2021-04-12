@@ -5,6 +5,28 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseStorageBook", "UseStorageBook\UseStorageBook.csproj", "{F705C8AC-7C01-4D68-A0B0-B75AFCC9CC53}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{D5687211-1486-4A7A-80DA-4274E4ABA1B0}"
+	ProjectSection(SolutionItems) = preProject
+		lib\0Harmony.dll = lib\0Harmony.dll
+		lib\0Harmony.xml = lib\0Harmony.xml
+		lib\Assembly-CSharp.dll = lib\Assembly-CSharp.dll
+		lib\BepInEx.dll = lib\BepInEx.dll
+		lib\BepInEx.Harmony.dll = lib\BepInEx.Harmony.dll
+		lib\BepInEx.Harmony.xml = lib\BepInEx.Harmony.xml
+		lib\BepInEx.Preloader.dll = lib\BepInEx.Preloader.dll
+		lib\BepInEx.Preloader.xml = lib\BepInEx.Preloader.xml
+		lib\BepInEx.xml = lib\BepInEx.xml
+		lib\Newtonsoft.Json.dll = lib\Newtonsoft.Json.dll
+		lib\TaiwuUIKit.dll = lib\TaiwuUIKit.dll
+		lib\TaiwuUIKit.xml = lib\TaiwuUIKit.xml
+		lib\UnityUIKit.dll = lib\UnityUIKit.dll
+		lib\UnityUIKit.xml = lib\UnityUIKit.xml
+		lib\YamlDotNet.dll = lib\YamlDotNet.dll
+		lib\YamlDotNet.xml = lib\YamlDotNet.xml
+		lib\YanLib.dll = lib\YanLib.dll
+		lib\YanLib.xml = lib\YanLib.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
