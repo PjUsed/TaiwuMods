@@ -38,7 +38,7 @@ namespace StorageCheck
         private readonly string _showGoodPageContainerName = $"{ModId}.ShowGoodPage.Container";
         private readonly string _showGoodPageContainerToggleName = $"{ModId}.ShowGoodPage.Toggle";
 
-        #endregion
+        #endregion 控件名称设置
 
         public void Awake()
         {
@@ -118,6 +118,7 @@ namespace StorageCheck
                     Direction = Direction.Horizontal,
                     Spacing = 4,
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel()
@@ -139,9 +140,9 @@ namespace StorageCheck
                 }
             };
 
-            container.Children.Add(enableContainer);
+            container.Children.Add(showBagContainer);
 
-            #endregion Mod启用禁用开关
+            #endregion 是否显示背包开关
 
             #region 是否显示仓库开关
 
@@ -154,6 +155,7 @@ namespace StorageCheck
                     Direction = Direction.Horizontal,
                     Spacing = 4,
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel()
@@ -175,9 +177,9 @@ namespace StorageCheck
                 }
             };
 
-            container.Children.Add(enableContainer);
+            container.Children.Add(showWarehouseContainer);
 
-            #endregion Mod启用禁用开关
+            #endregion 是否显示仓库开关
 
             #region 是否显示书籍信息开关
 
@@ -190,6 +192,7 @@ namespace StorageCheck
                     Direction = Direction.Horizontal,
                     Spacing = 4,
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel()
@@ -211,9 +214,9 @@ namespace StorageCheck
                 }
             };
 
-            container.Children.Add(enableContainer);
+            container.Children.Add(showBookInfoContainer);
 
-            #endregion Mod启用禁用开关
+            #endregion 是否显示书籍信息开关
 
             #region 是否显示页数开关
 
@@ -226,6 +229,7 @@ namespace StorageCheck
                     Direction = Direction.Horizontal,
                     Spacing = 4,
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel()
@@ -247,9 +251,9 @@ namespace StorageCheck
                 }
             };
 
-            container.Children.Add(enableContainer);
+            container.Children.Add(showGoodPageContainer);
 
-            #endregion Mod启用禁用开关
+            #endregion 是否显示页数开关
 
             ModHelper.SettingUI = container;
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace StorageCheck.HarmonyPatchs
 {
-    [HarmonyPatch(typeof(WindowManage), "ShowBookMassage")]
+	[HarmonyPatch(typeof(WindowManage), "ShowBookMassage")]
 	public static class WindowManage_ShowBookMassage_Patch
 	{
 		public static string getBookInfo(WindowManage __instance, int itemId)
@@ -98,29 +98,13 @@ namespace StorageCheck.HarmonyPatchs
 			return text;
 		}
 
-		private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-		{
-			List<CodeInstruction> list = new List<CodeInstruction>(instructions);
-			StorageCheck.ModLogger.LogInfo((object)(" Transpiler init codes: " + list.Count));
-			bool flag = true;
-			int index = 0;
-			if (flag)
-			{
-				List<CodeInstruction> list2 = new List<CodeInstruction>();
-				list2.Add(new CodeInstruction(OpCodes.Ldsfld, (object)typeof(StorageCheck).GetProperty("IsEnable")));
-				list2.Add(new CodeInstruction(OpCodes.Ldc_I4_0, (object)null));
-				list2.Add(new CodeInstruction(OpCodes.Beq_S, (object)7));
-				list2.Add(new CodeInstruction(OpCodes.Ldarg_0, (object)null));
-				list2.Add(new CodeInstruction(OpCodes.Ldarg_1, (object)null));
-				list2.Add(new CodeInstruction(OpCodes.Call, (object)typeof(WindowManage_ShowBookMassage_Patch).GetMethod("getBookInfo")));
-				list2.Add(new CodeInstruction(OpCodes.Ret, (object)null));
-				list.InsertRange(index, list2);
-			}
-			else
-			{
-				StorageCheck.ModLogger.LogError((object)" game changed ... this mod failed to find code to patch...");
-			}
-			return list.AsEnumerable();
-		}
+		static bool Prefix(ref int itemId, ref WindowManage __instance, ref string __result)
+        {
+			if (!StorageCheck.IsEnable)
+				return true;
+
+			__result = getBookInfo(__instance, itemId);
+			return false;
+        }
 	}
 }
