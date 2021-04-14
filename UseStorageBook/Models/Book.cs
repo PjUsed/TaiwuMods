@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace UseStorageBook
+namespace UseStorageBook.Models
 {
     /// <summary>
     /// 书本
