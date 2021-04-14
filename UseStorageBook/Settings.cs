@@ -39,7 +39,7 @@ namespace UseStorageBook
         /// <summary>
         /// 书本门派
         /// </summary>
-        public static readonly string[] BookSect = { "无门派", "少林派", "峨眉派", "百花谷", "武当派", "元山派", "狮相门", "然山派", "璇女派", "铸剑山庄", "空桑派", "无量金刚宗", "五仙教", "界青门", "伏龙坛", "血犼教" };
+        public static readonly string[] BookSect = { "无门派", "少林派", "峨眉派", "百花谷", "武当派", "元山派", "狮相门", "然山派", "璇女派", "铸剑山庄", "空桑派", "金刚宗", "五仙教", "界青门", "伏龙坛", "血犼教" };
 
         #endregion 静态公共字段
 
@@ -178,68 +178,23 @@ namespace UseStorageBook
 
         /// <summary>
         /// 设置数组设置
-        /// <para>配置文件设置为引用类型时，修改内部的值不会触发保存，此处重新给设置赋值</para>
+        /// <para>配置文件设置为引用类型时，修改内部的值不会触发保存，此处重新赋值触发更新</para>
         /// </summary>
         /// <typeparam name="T">数组类型</typeparam>
         /// <param name="entry">数组设置</param>
         /// <param name="index">索引</param>
         /// <param name="value">值</param>
-        private static void SetArraySetting<T>(ConfigEntry<T[]> entry, int index, T value) where T : IEquatable<T>
+        private void SetArraySetting<T>(ConfigEntry<T[]> entry, int index, T value) where T : IEquatable<T>
         {
-            try
+            if(!entry.Value[index].Equals(value))
             {
                 var array = new T[entry.Value.Length];
                 entry.Value.CopyTo(array, 0);
-                if(!array[index].Equals(value))
-                {
-                    array[index] = value;
-                    entry.Value = array.ToArray();
-                }
+                array[index] = value;
+                entry.Value = array;
             }
-            catch { }
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// 设置类型
-    /// </summary>
-    public enum SettingType
-    {
-        /// <summary>
-        /// 启用/禁用
-        /// </summary>
-        Enabled,
-
-        /// <summary>
-        /// 背包/仓库
-        /// </summary>
-        Source,
-
-        /// <summary>
-        /// 真传/手抄
-        /// </summary>
-        Type,
-
-        /// <summary>
-        /// 阅读进度
-        /// </summary>
-        Status,
-
-        /// <summary>
-        /// 品级
-        /// </summary>
-        Level,
-
-        /// <summary>
-        /// 功法类型
-        /// </summary>
-        GongFa,
-
-        /// <summary>
-        /// 门派
-        /// </summary>
-        Sect
     }
 }

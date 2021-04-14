@@ -6,6 +6,7 @@ namespace UseStorageBook.HarmonyPatchs
     /// 解决鼠标放在书本上不显示仓库中书上时，不显示仓库中书的阅读状态的BUG
     /// （暂时将书加入背包）
     /// </summary>
+    [HarmonyBefore("TaiwuMod.plugins.StorageCheck")]
     [HarmonyPatch(typeof(WindowManage), "ShowBookMassage", typeof(int))]
     public static class WindowsManage_ShowBookMassage_Patch
     {

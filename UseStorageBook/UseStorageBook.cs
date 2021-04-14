@@ -128,6 +128,7 @@ namespace UseStorageBook
                     Direction = Direction.Horizontal,
                     Spacing = 4
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel
@@ -165,6 +166,7 @@ namespace UseStorageBook
                     Direction = Direction.Horizontal,
                     Spacing = 4
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel()
@@ -202,6 +204,7 @@ namespace UseStorageBook
                     Direction = Direction.Horizontal,
                     Spacing = 4
                 },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new TaiwuLabel()
@@ -239,6 +242,7 @@ namespace UseStorageBook
                     Spacing = 5
                 },
                 SizeFitter = { VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new Container
@@ -309,6 +313,7 @@ namespace UseStorageBook
                     Spacing = 5
                 },
                 SizeFitter = { VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new Container
@@ -389,6 +394,7 @@ namespace UseStorageBook
                     Spacing = 5
                 },
                 SizeFitter = { VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize },
+                DefaultActive = IsEnable,
                 Children =
                 {
                     new Container
