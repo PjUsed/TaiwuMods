@@ -25,7 +25,7 @@ namespace UseStorageBook
 
         public const string ModId = "TaiwuMod.plugins.UseStorageBook";
         public const string ModName = "使用仓库中的书";
-        public const string ModVersion = "1.4.2";
+        public const string ModVersion = "1.4.3";
 
         #region 控件名称设置
 

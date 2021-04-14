@@ -12,15 +12,16 @@ namespace UseStorageBook.HarmonyPatchs
         /// <summary>
         /// 记录当前书的id，并将仓库中的书暂时加入背包
         /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="__state"></param>
+        /// <param name="itemId">物品Id</param>
+        /// <param name="__state">状态，用于储存物品Id</param>
         static void Prefix(ref int itemId, ref int __state)
         {
             if (!UseStorageBook.IsEnable)
                 return;
             if (DateFile.instance.actorItemsDate[-999].ContainsKey(itemId))
             {
-                DateFile.instance.actorItemsDate[DateFile.instance.MianActorID()].Add(itemId, 1);
+                DateFile.instance.actorItemsDate[-999].Remove(itemId);
+                DateFile.instance.actorItemsDate[DateFile.instance.mianActorId].Add(itemId, 1);
                 __state = itemId;
             }
             else
@@ -39,7 +40,8 @@ namespace UseStorageBook.HarmonyPatchs
                 return;
             if (__state > 0)
             {
-                DateFile.instance.actorItemsDate[DateFile.instance.MianActorID()].Remove(__state);
+                DateFile.instance.actorItemsDate[DateFile.instance.mianActorId].Remove(__state);
+                DateFile.instance.actorItemsDate[-999].Add(__state, 1);
             }
         }
     }
