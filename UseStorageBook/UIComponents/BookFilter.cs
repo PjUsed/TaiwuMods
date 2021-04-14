@@ -2,8 +2,9 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UseStorageBook.Extensions;
 
-namespace UseStorageBook
+namespace UseStorageBook.UIComponents
 {
     internal class BookFilter : MonoBehaviour
     {
@@ -80,7 +81,7 @@ namespace UseStorageBook
             {
                 PrepareGUIStyle();
 
-                Vector2 vector = new Vector2((float)Screen.width / 1600f, (float)Screen.height / 900f);
+                Vector2 vector = new Vector2(Screen.width / 1600f, Screen.height / 900f);
                 GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(vector.x, vector.y, 1f));
                 GUI.backgroundColor = Color.black;
                 GUI.color = Color.white;

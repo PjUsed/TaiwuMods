@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UseStorageBook.Extensions;
+using UseStorageBook.Models;
 
-namespace UseStorageBook
+namespace UseStorageBook.HarmonyPatchs
 {
     [HarmonyPatch(typeof(BuildingWindow), "SetBook")]
     public class BuildingWindow_SetBook_Patch
@@ -72,103 +74,5 @@ namespace UseStorageBook
         }
 
         #endregion
-    }
-
-    [HarmonyPatch(typeof(BuildingWindow), "SetChooseBookWindow")]
-    public class BuildingWindow_SetChooseBookWindow_Patch
-    {
-        /// <summary>
-        /// 设置并显示筛选界面UI
-        /// </summary>
-        static void Postfix()
-        {
-            if (!UseStorageBook.IsEnable)
-                return;
-
-            if (BookFilter.Instance is null)
-                BookFilter.Load();
-            BookFilter.Instance?.ShowMenu();
-        }
-    }
-
-    [HarmonyPatch(typeof(BuildingWindow), "CloseBookWindow")]
-    public class BuildingWindow_CloseBookWindow_Patch
-    {
-        /// <summary>
-        /// 关闭筛选界面UI
-        /// </summary>
-        static void Postfix()
-        {
-            if (!UseStorageBook.IsEnable)
-                return;
-
-            BookFilter.Instance?.CloseMenu();
-        }
-    }
-    
-    [HarmonyPatch(typeof(ReadBook), "CloseReadBook")]
-    public static class ReadBook_CloseReadBook_Patch
-    {
-        /// <summary>
-        /// 仓库中的书耐久为0时将其移除
-        /// </summary>
-        static void Prefix()
-        {
-            if (!UseStorageBook.IsEnable)
-                return;
-            var df = DateFile.instance;
-            var bookId = BuildingWindow.instance.readBookId;
-            if (df.GetActorItems(-999).ContainsKey(bookId))
-            {
-                var hp = int.Parse(df.GetItemDate(bookId, 901));
-                if (hp <= 1)
-                {
-                    df.LoseItem(-999, bookId, 1, true);
-                    UseStorageBook.ModLogger.LogMessage($"仓库书籍(id:{bookId})已销毁");
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 解决鼠标放在书本上不显示仓库中书上时，不显示仓库中书的阅读状态的BUG
-    /// （暂时将书加入背包）
-    /// </summary>
-    [HarmonyPatch(typeof(WindowManage), "ShowBookMassage", typeof(int))]
-    public static class WindowsManage_ShowBookMassage_Patch
-    {
-        /// <summary>
-        /// 记录当前书的id，并将仓库中的书暂时加入背包
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="__state"></param>
-        static void Prefix(ref int itemId, ref int __state)
-        {
-            if (!UseStorageBook.IsEnable)
-                return;
-            if (DateFile.instance.actorItemsDate[-999].ContainsKey(itemId))
-            {
-                DateFile.instance.actorItemsDate[DateFile.instance.MianActorID()].Add(itemId, 1);
-                __state = itemId;
-            }
-            else
-            {
-                __state = -1;
-            }
-        }
-
-        /// <summary>
-        /// 将书从背包中移除
-        /// </summary>
-        /// <param name="__state"></param>
-        static void Postfix(ref int __state)
-        {
-            if (!UseStorageBook.IsEnable)
-                return;
-            if (__state > 0)
-            {
-                DateFile.instance.actorItemsDate[DateFile.instance.MianActorID()].Remove(__state);
-            }
-        }
     }
 }
