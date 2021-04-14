@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{D568
 		lib\YanLib.xml = lib\YanLib.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageCheck", "StorageCheck\StorageCheck.csproj", "{53302908-A06C-490E-B03A-8E7BAF8C0FBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{F705C8AC-7C01-4D68-A0B0-B75AFCC9CC53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F705C8AC-7C01-4D68-A0B0-B75AFCC9CC53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F705C8AC-7C01-4D68-A0B0-B75AFCC9CC53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53302908-A06C-490E-B03A-8E7BAF8C0FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53302908-A06C-490E-B03A-8E7BAF8C0FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53302908-A06C-490E-B03A-8E7BAF8C0FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53302908-A06C-490E-B03A-8E7BAF8C0FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
