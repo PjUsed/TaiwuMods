@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{67853443-93D2-450E-9328-02A0316DF973}</ProjectGuid>
+    <ProjectGuid>{53302908-A06C-490E-B03A-8E7BAF8C0FBD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StorageCheck</RootNamespace>
@@ -96,18 +96,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HarmonyPatchs\WindowManage_ShowBookMassage_Patch.cs" />
-    <Compile Include="HarmonyPatchs\WindowManage_ShowItemMassage_Patch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StorageCheck.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="HarmonyPatch\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>if not exist "$(SolutionDir)build\$(ProjectName)" mkdir "$(SolutionDir)build\$(ProjectName)"</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)build\$(ProjectName)" /Y</PostBuildEvent>
-  </PropertyGroup>
 </Project>
