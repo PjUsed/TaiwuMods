@@ -9,6 +9,5 @@
 ## 打算迁移项目列表
 - 无
 
-## 打算迁移项目列表
-源码编译方法：
+## 源码编译方法
 使用Visual Studio打开TaiwuMods.sln，然后选择生成，项目根目录就会出现一个build文件夹，将该文件夹复制到mod所在目录(BepInEx\plugins)即可
