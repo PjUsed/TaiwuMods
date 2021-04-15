@@ -60,6 +60,11 @@ namespace StorageCheck.Models
         public ItemType ItemType { get; set; }
 
         /// <summary>
+        /// 书本每页状态
+        /// </summary>
+        public int[] BookStatus { get; set; }
+
+        /// <summary>
         /// 修习进度
         /// </summary>
         public int[] LearnProcess { get; set; }
@@ -74,6 +79,11 @@ namespace StorageCheck.Models
         /// </summary>
         public int[] BadPages { get; set; }
 
+        /// <summary>
+        /// Key, 大于0时为书籍
+        /// </summary>
+        public int Key { get; set; }
+
         #endregion 公共属性
 
         #region 构造函数
@@ -84,7 +94,6 @@ namespace StorageCheck.Models
         /// <param name="itemId">物品Id</param>
         public ItemInfo(int itemId)
         {
-            StorageCheck.ModLogger.LogInfo($"Create ItemInfo of id:{itemId}");
             Id = itemId;
 
             var mainActorId = DateFile.instance.MianActorID();
@@ -94,18 +103,21 @@ namespace StorageCheck.Models
 
             #region 判断物品类型及功法技艺书的修习进度
 
+            // Key, 大于0时为书籍
             var bookKey = int.Parse(DateFile.instance.GetItemDate(itemId, 32));
-            var bookType = int.Parse(DateFile.instance.GetItemDate(itemId, 31));
+            Key = bookKey;
             if(bookKey > 0)
             {
-                if(bookType == 17)
+                var bookType = int.Parse(DateFile.instance.GetItemDate(itemId, 31));
+                BookStatus = DateFile.instance.GetBookPage(itemId);
+                if (bookType == 17)
                 {
                     ItemType = ItemType.GongfaBook;
                     LearnProcess = DateFile.instance.gongFaBookPages.ContainsKey(bookKey) ? DateFile.instance.gongFaBookPages[bookKey] : new int[10];
                 }
                 else
                 {
-                    ItemType = ItemType.GongfaBook;
+                    ItemType = ItemType.SkillBook;
                     LearnProcess = DateFile.instance.skillBookPages.ContainsKey(bookKey) ? DateFile.instance.skillBookPages[bookKey] : new int[10];
                 }
             }
@@ -122,6 +134,9 @@ namespace StorageCheck.Models
             var itemKey = DateFile.instance.GetItemDate(itemId, 999);
             if (int.Parse(itemKey) > 0)
             {
+                GoodPages = new int[10];
+                BadPages = new int[10];
+                // 物品是否可堆叠
                 var stackable = int.Parse(DateFile.instance.GetItemDate(itemId, 6)) != 0;
                 if (checkBag)
                 {
@@ -144,8 +159,8 @@ namespace StorageCheck.Models
                             if (showBookInfo && ItemType != ItemType.Other)
                             {
                                 var bookPages = DateFile.instance.GetBookPage(key);
-                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(key, 35, true, -1)) == 0;
-                                for (int i = 0; i < 10; i++)
+                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(itemId, 35, true, -1)) == 0;
+                                for (int i = 0; i < bookPages.Length; i++)
                                 {
                                     if (bookPages[i] == 0)
                                     {
@@ -176,8 +191,8 @@ namespace StorageCheck.Models
                             if (showBookInfo && ItemType != ItemType.Other)
                             {
                                 var bookPages = DateFile.instance.GetBookPage(key);
-                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(key, 35, true, -1)) == 0;
-                                for (int i = 0; i < 10; i++)
+                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(itemId, 35, true, -1)) == 0;
+                                for (int i = 0; i < bookPages.Length; i++)
                                 {
                                     if (bookPages[i] == 0)
                                     {
@@ -212,7 +227,7 @@ namespace StorageCheck.Models
         /// </summary>
         /// <param name="itemId">物品Id</param>
         /// <returns>物品信息</returns>
-        public ItemInfo Get(int itemId) =>_currentItem?.Id == itemId ? _currentItem : new ItemInfo(itemId);
+        public static ItemInfo Get(int itemId) =>_currentItem?.Id == itemId ? _currentItem : new ItemInfo(itemId);
 
         /// <summary>
         /// 设置变更，当前物品信息重置

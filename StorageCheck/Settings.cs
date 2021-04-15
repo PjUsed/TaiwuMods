@@ -22,12 +22,12 @@ namespace StorageCheck
         public ConfigEntry<bool> CheckWarehouse;
 
         /// <summary>
-        /// 是否显示书本信息
+        /// 是否显示书籍信息
         /// </summary>
         public ConfigEntry<bool> ShowBookInfo;
 
         /// <summary>
-        /// 是否显示真传手抄页数
+        /// 是否分别显示真传手抄
         /// </summary>
         public ConfigEntry<bool> ShowBookPage;
 
@@ -44,8 +44,8 @@ namespace StorageCheck
             Enabled = config.Bind(nameof(Settings), nameof(Enabled), true, "是否开启 Mod");
             CheckBag = config.Bind(nameof(Settings), nameof(CheckBag), true, "是否检查背包");
             CheckWarehouse = config.Bind(nameof(Settings), nameof(CheckWarehouse), true, "是否检查仓库");
-            ShowBookInfo = config.Bind(nameof(Settings), nameof(ShowBookInfo), true, "是否显示书本信息");
-            ShowBookPage = config.Bind(nameof(Settings), nameof(ShowBookPage), true, "是否显示真传手抄页数");
+            ShowBookInfo = config.Bind(nameof(Settings), nameof(ShowBookInfo), true, "是否显示书籍信息");
+            ShowBookPage = config.Bind(nameof(Settings), nameof(ShowBookPage), true, "是否分别显示真传手抄");
         }
 
         #endregion 设置初始化方法

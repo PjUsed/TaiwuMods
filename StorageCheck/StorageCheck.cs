@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using StorageCheck.Models;
 using System;
+using System.Linq;
 using TaiwuUIKit.GameObjects;
 using UnityUIKit.Core;
 using UnityUIKit.Core.GameObjects;
@@ -45,7 +46,7 @@ namespace StorageCheck
                 {
                     Direction = Direction.Vertical,
                     Spacing = 10,
-                    Padding = {0, 10, 0, 0}
+                    Padding = { 0, 10, 0, 0 }
                 },
                 SizeFitter = { VerticalFit = FitMode.PreferredSize },
                 Children =
@@ -55,6 +56,8 @@ namespace StorageCheck
                     {
                         Name = $"{ModId}.Enable.Toggle",
                         Text = Settings.Enabled.Value ? "库存检查 开" : "库存检查 关",
+                        UseBoldFont = true,
+                        UseOutline = true,
                         Element = { PreferredSize = { 0, 50 } },
                         isOn = Settings.Enabled.Value,
                         onValueChanged = (value, sender) =>
@@ -66,7 +69,7 @@ namespace StorageCheck
                                 if(value)
                                     harmony.PatchAll();
                                 else
-                                    harmony.UnpatchAll();
+                                    harmony.UnpatchSelf();
                             }
                             catch (Exception ex)
                             {
@@ -124,24 +127,31 @@ namespace StorageCheck
                                 Text = "书籍信息",
                                 Element = { PreferredSize = { 0, 50 } },
                                 TipTitle = "说明",
-                                TipContant = "是否显示书籍信息对比",
+                                TipContant = "是否显示书籍已有页数",
                                 isOn = Settings.ShowBookInfo.Value,
-                                onValueChanged = (value, _) =>
+                                onValueChanged = (value, sender) =>
                                 {
                                     Settings.ShowBookInfo.Value = value;
                                     ItemInfo.ResetCurrentItem();
+                                    if (!value)
+                                    {
+                                        var tg = (TaiwuToggle)sender.Parent.Children.SingleOrDefault(t => t is TaiwuToggle && t.Name == $"{ModId}.ShowBookPage.Toggle");
+                                        if(tg != null)
+                                            tg.isOn = value;
+                                    }
                                 }
                             },
                             new TaiwuToggle()
                             {
+                                Name = $"{ModId}.ShowBookPage.Toggle",
                                 Text = "真传手抄",
                                 Element = { PreferredSize = { 0, 50 } },
                                 TipTitle = "说明",
                                 TipContant = "是否分别显示真传手抄页数\n关闭则显示书籍已有页数",
-                                isOn = Settings.ShowBookInfo.Value,
+                                isOn = Settings.ShowBookPage.Value,
                                 onValueChanged = (value, _) =>
                                 {
-                                    Settings.ShowBookInfo.Value = value;
+                                    Settings.ShowBookPage.Value = value;
                                     ItemInfo.ResetCurrentItem();
                                 }
                             }
