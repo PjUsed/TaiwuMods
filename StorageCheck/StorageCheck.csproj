@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="HarmonyPatchs\WindowManage_ShowBookMassage_Patch.cs" />
     <Compile Include="HarmonyPatchs\WindowManage_ShowItemMassage_Patch.cs" />
+    <Compile Include="Models\ItemInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StorageCheck.cs" />
