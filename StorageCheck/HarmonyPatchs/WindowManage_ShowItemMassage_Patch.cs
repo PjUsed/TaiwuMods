@@ -42,14 +42,14 @@ namespace StorageCheck.HarmonyPatchs
 			if (StorageCheck.IsEnable)
 			{
 				string text = ___baseWeaponMassage;
-				if (StorageCheck.Settings.ShowBag.Value)
+				if (StorageCheck.Settings.CheckBag.Value)
 				{
 					int num = 0;
 					int usenum = 0;
 					int totalcount = 0;
 					text = (getItemNumber(DateFile.instance.MianActorID(), itemId, ref num, ref usenum, ref totalcount) ? (text + DateFile.instance.SetColoer(20008, $"\n 背包数量: {num}  总耐久: {usenum}/{totalcount}", false)) : (text + DateFile.instance.SetColoer(20008, $"\n 背包数量: {num} ", false)));
 				}
-				if (StorageCheck.Settings.ShowWarehouse.Value)
+				if (StorageCheck.Settings.CheckWarehouse.Value)
 				{
 					int num2 = 0;
 					int usenum2 = 0;

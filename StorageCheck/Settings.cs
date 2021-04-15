@@ -12,14 +12,14 @@ namespace StorageCheck
         public ConfigEntry<bool> Enabled;
 
         /// <summary>
-        /// 是否显示背包
+        /// 是否检查背包
         /// </summary>
-        public ConfigEntry<bool> ShowBag;
+        public ConfigEntry<bool> CheckBag;
 
         /// <summary>
-        /// 是否显示仓库
+        /// 是否检查仓库
         /// </summary>
-        public ConfigEntry<bool> ShowWarehouse;
+        public ConfigEntry<bool> CheckWarehouse;
 
         /// <summary>
         /// 是否显示书本信息
@@ -27,9 +27,9 @@ namespace StorageCheck
         public ConfigEntry<bool> ShowBookInfo;
 
         /// <summary>
-        /// 是否显示页数
+        /// 是否显示真传手抄页数
         /// </summary>
-        public ConfigEntry<bool> ShowGoodPage;
+        public ConfigEntry<bool> ShowBookPage;
 
         #endregion 公共字段
 
@@ -42,10 +42,10 @@ namespace StorageCheck
         public void Init(ConfigFile config)
         {
             Enabled = config.Bind(nameof(Settings), nameof(Enabled), true, "是否开启 Mod");
-            ShowBag = config.Bind(nameof(Settings), nameof(ShowBag), true, "是否显示背包");
-            ShowWarehouse = config.Bind(nameof(Settings), nameof(ShowWarehouse), true, "是否显示仓库");
+            CheckBag = config.Bind(nameof(Settings), nameof(CheckBag), true, "是否检查背包");
+            CheckWarehouse = config.Bind(nameof(Settings), nameof(CheckWarehouse), true, "是否检查仓库");
             ShowBookInfo = config.Bind(nameof(Settings), nameof(ShowBookInfo), true, "是否显示书本信息");
-            ShowGoodPage = config.Bind(nameof(Settings), nameof(ShowGoodPage), true, "是否显示页数");
+            ShowBookPage = config.Bind(nameof(Settings), nameof(ShowBookPage), true, "是否显示真传手抄页数");
         }
 
         #endregion 设置初始化方法
