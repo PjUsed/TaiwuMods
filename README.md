@@ -11,3 +11,6 @@
 
 ## 源码编译方法
 使用Visual Studio打开TaiwuMods.sln，然后选择生成，项目根目录就会出现一个build文件夹，将该文件夹下的**所有文件夹**复制到**mod所在目录**(BepInEx\plugins)即可
+
+## 贡献项目
+欢迎以任何方式参与贡献本项目
