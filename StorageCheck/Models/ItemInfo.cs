@@ -138,7 +138,7 @@ namespace StorageCheck.Models
                             int.Parse(DateFile.instance.GetActorDate(mainActorId, 309, false)),
                             int.Parse(DateFile.instance.GetActorDate(mainActorId, 310, false)),
                     });
-                var (count, avail, total, good, bad) = GetItemsInfoMatchId(keys, itemId, ItemType);
+                var (count, avail, total, good, bad) = GetItemsInfoMatchId(keys, mainActorId, itemId, ItemType);
                 BagCount += count;
                 BagAvailableUseTimes += avail;
                 BagTotalUseTimes += total;
@@ -150,7 +150,7 @@ namespace StorageCheck.Models
             }
             if (StorageCheck.Settings.CheckWarehouse.Value)
             {
-                var (count, avail, total, good, bad) = GetItemsInfoMatchId(DateFile.instance.actorItemsDate[-999].Keys, itemId, ItemType);
+                var (count, avail, total, good, bad) = GetItemsInfoMatchId(DateFile.instance.actorItemsDate[-999].Keys, -999, itemId, ItemType);
                 WarehouseCount += count;
                 WarehouseAvailableUseTimes += avail;
                 WarehouseTotalUseTimes += total;
@@ -224,19 +224,19 @@ namespace StorageCheck.Models
         /// <param name="itemId">指定物品Id</param>
         /// <param name="itemType"></param>
         /// <returns></returns>
-        private static (int Count, int Available, int Total, int[] Good, int[] Bad) GetItemsInfoMatchId(IEnumerable<int> items, int itemId, ItemType itemType)
+        private static (int Count, int Available, int Total, int[] Good, int[] Bad) GetItemsInfoMatchId(IEnumerable<int> items, int actorId, int itemId, ItemType itemType)
         {
             int count = 0, avail = 0, total = 0;
             int[] good = new int[10], bad = new int[10];
             // 物品对应的固定Id，非物品唯一Id
             var itemKey = DateFile.instance.GetItemDate(itemId, 999);
-            if(int.Parse(itemKey) > 0)
+            if (int.Parse(itemKey) > 0)
             {
                 // 物品是否可堆叠
                 var stackable = int.Parse(DateFile.instance.GetItemDate(itemId, 6)) != 0;
                 foreach (var key in items.Where(k => IsSameItem(DateFile.instance.GetItemDate(k, 999), itemKey)))
                 {
-                    count += stackable ? DateFile.instance.actorItemsDate[-999][key] : 1;
+                    count += stackable ? DateFile.instance.actorItemsDate[actorId][key] : 1;
                     avail += int.Parse((Items.GetItem(key) != null) ? DateFile.instance.GetItemDate(key, 901) : DateFile.instance.GetItemDate(key, 902));
                     total += int.Parse((Items.GetItem(key) != null) ? Items.GetItemProperty(key, 902) : DateFile.instance.GetItemDate(key, 902));
                     if (StorageCheck.Settings.ShowBookInfo.Value && itemType != ItemType.Other)
