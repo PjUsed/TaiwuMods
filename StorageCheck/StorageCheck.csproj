@@ -106,7 +106,9 @@
     <Compile Include="Settings.cs" />
     <Compile Include="StorageCheck.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(SolutionDir)build\$(ProjectName)" mkdir "$(SolutionDir)build\$(ProjectName)"</PreBuildEvent>
