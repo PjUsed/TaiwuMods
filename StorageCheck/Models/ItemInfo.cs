@@ -131,7 +131,17 @@ namespace StorageCheck.Models
             #region 获取背包和仓库物品状态
 
             // 物品对应的固定Id，非物品唯一Id
+            // 400000~499999为技艺书
+            // 500000~699999为功法书真传
+            // 700000~899999为功法书手抄，真传+200000
             var itemKey = DateFile.instance.GetItemDate(itemId, 999);
+            var itemKeyInt = int.Parse(itemKey);
+            if(itemKeyInt >= 700000 && itemKeyInt <= 899999)
+            {
+                itemKeyInt -= 200000;
+                itemKey = itemKeyInt.ToString();
+            }
+            StorageCheck.ModLogger.LogMessage($"itemKey: {itemKey}");
             if (int.Parse(itemKey) > 0)
             {
                 GoodPages = new int[10];
@@ -153,13 +163,13 @@ namespace StorageCheck.Models
                     {
                         if (DateFile.instance.GetItemDate(key, 999) == itemKey)
                         {
-                            BagCount += stackable ? DateFile.instance.actorItemsDate[mainActorId][itemId] : 1;
+                            BagCount += stackable ? DateFile.instance.actorItemsDate[mainActorId][key] : 1;
                             BagAvailableUseTimes += int.Parse((Items.GetItem(key) != null) ? DateFile.instance.GetItemDate(key, 901) : DateFile.instance.GetItemDate(key, 902));
                             BagTotalUseTimes += int.Parse((Items.GetItem(key) != null) ? Items.GetItemProperty(key, 902) : DateFile.instance.GetItemDate(key, 902));
                             if (showBookInfo && ItemType != ItemType.Other)
                             {
                                 var bookPages = DateFile.instance.GetBookPage(key);
-                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(itemId, 35, true, -1)) == 0;
+                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(key, 35)) == 0;
                                 for (int i = 0; i < bookPages.Length; i++)
                                 {
                                     if (bookPages[i] == 0)
@@ -185,13 +195,13 @@ namespace StorageCheck.Models
                     {
                         if (DateFile.instance.GetItemDate(key, 999) == itemKey)
                         {
-                            WarehouseCount += stackable ? DateFile.instance.actorItemsDate[-999][itemId] : 1;
+                            WarehouseCount += stackable ? DateFile.instance.actorItemsDate[-999][key] : 1;
                             WarehouseAvailableUseTimes += int.Parse((Items.GetItem(key) != null) ? DateFile.instance.GetItemDate(key, 901) : DateFile.instance.GetItemDate(key, 902));
                             WarehouseTotalUseTimes += int.Parse((Items.GetItem(key) != null) ? Items.GetItemProperty(key, 902) : DateFile.instance.GetItemDate(key, 902));
                             if (showBookInfo && ItemType != ItemType.Other)
                             {
                                 var bookPages = DateFile.instance.GetBookPage(key);
-                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(itemId, 35, true, -1)) == 0;
+                                var isGoodBook = int.Parse(DateFile.instance.GetItemDate(key, 35)) == 0;
                                 for (int i = 0; i < bookPages.Length; i++)
                                 {
                                     if (bookPages[i] == 0)
