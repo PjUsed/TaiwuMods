@@ -197,11 +197,13 @@ namespace StorageCheck.Models
         /// <returns>true为物品相同，false相反</returns>
         private static bool IsSameItem(string item1Key, string item2Key)
         {
-            if(int.TryParse(item1Key, out var id1) && int.TryParse(item2Key, out var id2))
+            if(item1Key == item2Key)
+                return true;
+            if (int.TryParse(item1Key, out var id1) && int.TryParse(item2Key, out var id2))
             {
-                if (id1 == id2)
+                if (id1 >= 500000 && id1 < 700000 && id1 + 200000 == id2)
                     return true;
-                else if (id1 >= 500000 && id1 < 700000 && id1 + 200000 == id2)
+                if (id2 >= 500000 && id2 < 700000 && id2 + 200000 == id1)
                     return true;
             }
             return false;
