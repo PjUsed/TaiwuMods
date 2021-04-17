@@ -25,7 +25,7 @@ namespace StorageCheck
 
         public const string ModId = "TaiwuMod.plugins.StorageCheck";
         public const string ModName = "StorageCheck/库存检查";
-        public const string ModVersion = "1.1.1";
+        public const string ModVersion = "1.1.2";
 
         public void Awake()
         {
