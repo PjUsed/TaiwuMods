@@ -3,31 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseStorageBook", "UseStorageBook\UseStorageBook.csproj", "{F705C8AC-7C01-4D68-A0B0-B75AFCC9CC53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseStorageBook", "src\UseStorageBook\UseStorageBook.csproj", "{F705C8AC-7C01-4D68-A0B0-B75AFCC9CC53}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{D5687211-1486-4A7A-80DA-4274E4ABA1B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageCheck", "src\StorageCheck\StorageCheck.csproj", "{67853443-93D2-450E-9328-02A0316DF973}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{BF9E034F-C436-42AC-AA9B-47DEBB1BF829}"
 	ProjectSection(SolutionItems) = preProject
 		lib\0Harmony.dll = lib\0Harmony.dll
-		lib\0Harmony.xml = lib\0Harmony.xml
 		lib\Assembly-CSharp.dll = lib\Assembly-CSharp.dll
 		lib\BepInEx.dll = lib\BepInEx.dll
 		lib\BepInEx.Harmony.dll = lib\BepInEx.Harmony.dll
-		lib\BepInEx.Harmony.xml = lib\BepInEx.Harmony.xml
 		lib\BepInEx.Preloader.dll = lib\BepInEx.Preloader.dll
-		lib\BepInEx.Preloader.xml = lib\BepInEx.Preloader.xml
-		lib\BepInEx.xml = lib\BepInEx.xml
 		lib\Newtonsoft.Json.dll = lib\Newtonsoft.Json.dll
 		lib\TaiwuUIKit.dll = lib\TaiwuUIKit.dll
-		lib\TaiwuUIKit.xml = lib\TaiwuUIKit.xml
+		lib\Unity\UnityEngine.CoreModule.dll = lib\Unity\UnityEngine.CoreModule.dll
+		lib\Unity\UnityEngine.dll = lib\Unity\UnityEngine.dll
+		lib\Unity\UnityEngine.ImageConversionModule.dll = lib\Unity\UnityEngine.ImageConversionModule.dll
+		lib\Unity\UnityEngine.IMGUIModule.dll = lib\Unity\UnityEngine.IMGUIModule.dll
+		lib\Unity\UnityEngine.JSONSerializeModule.dll = lib\Unity\UnityEngine.JSONSerializeModule.dll
+		lib\Unity\UnityEngine.TextRenderingModule.dll = lib\Unity\UnityEngine.TextRenderingModule.dll
+		lib\Unity\UnityEngine.UI.dll = lib\Unity\UnityEngine.UI.dll
+		lib\Unity\UnityEngine.UIModule.dll = lib\Unity\UnityEngine.UIModule.dll
 		lib\UnityUIKit.dll = lib\UnityUIKit.dll
-		lib\UnityUIKit.xml = lib\UnityUIKit.xml
 		lib\YamlDotNet.dll = lib\YamlDotNet.dll
-		lib\YamlDotNet.xml = lib\YamlDotNet.xml
 		lib\YanLib.dll = lib\YanLib.dll
-		lib\YanLib.xml = lib\YanLib.xml
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageCheck", "StorageCheck\StorageCheck.csproj", "{67853443-93D2-450E-9328-02A0316DF973}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

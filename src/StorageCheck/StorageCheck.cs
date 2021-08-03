@@ -1,7 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using StorageCheck.Models;
 using System;
 using System.Linq;
 using TaiwuUIKit.GameObjects;
@@ -103,11 +102,7 @@ namespace StorageCheck
                                 TipTitle = "说明",
                                 TipContant = "是否统计背包中的物品",
                                 isOn = Settings.CheckBag.Value,
-                                onValueChanged = (value, _) =>
-                                {
-                                    Settings.CheckBag.Value = value;
-                                    ItemInfo.ResetCurrentItem();
-                                }
+                                onValueChanged = (value, _) => Settings.CheckBag.Value = value
                             },
                             new TaiwuToggle()
                             {
@@ -116,12 +111,7 @@ namespace StorageCheck
                                 TipTitle = "说明",
                                 TipContant = "是否统计仓库中的物品",
                                 isOn = Settings.CheckWarehouse.Value,
-                                onValueChanged = (value, _) =>
-                                {
-                                    Settings.CheckWarehouse.Value = value;
-                                    ItemInfo.ResetCurrentItem();
-                                }
-                            },
+                                onValueChanged = (value, _) => Settings.CheckWarehouse.Value = value                            },
                             new TaiwuToggle()
                             {
                                 Text = "书籍信息",
@@ -132,7 +122,6 @@ namespace StorageCheck
                                 onValueChanged = (value, sender) =>
                                 {
                                     Settings.ShowBookInfo.Value = value;
-                                    ItemInfo.ResetCurrentItem();
                                     if (!value)
                                     {
                                         var tg = (TaiwuToggle)sender.Parent.Children.SingleOrDefault(t => t is TaiwuToggle && t.Name == $"{ModId}.ShowBookPage.Toggle");
@@ -149,11 +138,7 @@ namespace StorageCheck
                                 TipTitle = "说明",
                                 TipContant = "是否分别显示真传手抄页数\n关闭则显示书籍已有页数",
                                 isOn = Settings.ShowBookPage.Value,
-                                onValueChanged = (value, _) =>
-                                {
-                                    Settings.ShowBookPage.Value = value;
-                                    ItemInfo.ResetCurrentItem();
-                                }
+                                onValueChanged = (value, _) => Settings.ShowBookPage.Value = value
                             }
                         }
                     }
