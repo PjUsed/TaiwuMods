@@ -1,4 +1,5 @@
 ﻿using GameData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,15 +10,6 @@ namespace StorageCheck.Models
     /// </summary>
     public class ItemInfo
     {
-        #region 私有字段
-
-        /// <summary>
-        /// 当前物品
-        /// </summary>
-        private static ItemInfo _currentItem;
-
-        #endregion 私有字段
-
         #region 公共属性
 
         /// <summary>
@@ -162,8 +154,6 @@ namespace StorageCheck.Models
             }
 
             #endregion 获取背包和仓库物品状态
-
-            _currentItem = this;
         }
 
         #endregion 构造函数
@@ -175,12 +165,7 @@ namespace StorageCheck.Models
         /// </summary>
         /// <param name="itemId">物品Id</param>
         /// <returns>物品信息</returns>
-        public static ItemInfo Get(int itemId) => _currentItem != null && IsSameItem(_currentItem.Id, itemId) ? _currentItem : new ItemInfo(itemId);
-
-        /// <summary>
-        /// 设置变更，当前物品信息重置
-        /// </summary>
-        public static void ResetCurrentItem() => _currentItem = null;
+        public static ItemInfo Get(int itemId) => new ItemInfo(itemId);
 
         #endregion 公共方法
 
