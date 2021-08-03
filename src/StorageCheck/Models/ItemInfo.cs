@@ -1,4 +1,5 @@
 ﻿using GameData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,15 +10,6 @@ namespace StorageCheck.Models
     /// </summary>
     public class ItemInfo
     {
-        #region 私有字段
-
-        /// <summary>
-        /// 当前物品
-        /// </summary>
-        private static ItemInfo _currentItem;
-
-        #endregion 私有字段
-
         #region 公共属性
 
         /// <summary>
@@ -138,7 +130,7 @@ namespace StorageCheck.Models
                             int.Parse(DateFile.instance.GetActorDate(mainActorId, 309, false)),
                             int.Parse(DateFile.instance.GetActorDate(mainActorId, 310, false)),
                     });
-                var (count, avail, total, good, bad) = GetItemsInfoMatchId(keys, itemId, ItemType);
+                var (count, avail, total, good, bad) = GetItemsInfoMatchId(keys, mainActorId, itemId, ItemType);
                 BagCount += count;
                 BagAvailableUseTimes += avail;
                 BagTotalUseTimes += total;
@@ -150,7 +142,7 @@ namespace StorageCheck.Models
             }
             if (StorageCheck.Settings.CheckWarehouse.Value)
             {
-                var (count, avail, total, good, bad) = GetItemsInfoMatchId(DateFile.instance.actorItemsDate[-999].Keys, itemId, ItemType);
+                var (count, avail, total, good, bad) = GetItemsInfoMatchId(DateFile.instance.actorItemsDate[-999].Keys, -999, itemId, ItemType);
                 WarehouseCount += count;
                 WarehouseAvailableUseTimes += avail;
                 WarehouseTotalUseTimes += total;
@@ -162,8 +154,6 @@ namespace StorageCheck.Models
             }
 
             #endregion 获取背包和仓库物品状态
-
-            _currentItem = this;
         }
 
         #endregion 构造函数
@@ -175,12 +165,7 @@ namespace StorageCheck.Models
         /// </summary>
         /// <param name="itemId">物品Id</param>
         /// <returns>物品信息</returns>
-        public static ItemInfo Get(int itemId) => _currentItem != null && IsSameItem(_currentItem.Id, itemId) ? _currentItem : new ItemInfo(itemId);
-
-        /// <summary>
-        /// 设置变更，当前物品信息重置
-        /// </summary>
-        public static void ResetCurrentItem() => _currentItem = null;
+        public static ItemInfo Get(int itemId) => new ItemInfo(itemId);
 
         #endregion 公共方法
 
@@ -224,19 +209,19 @@ namespace StorageCheck.Models
         /// <param name="itemId">指定物品Id</param>
         /// <param name="itemType"></param>
         /// <returns></returns>
-        private static (int Count, int Available, int Total, int[] Good, int[] Bad) GetItemsInfoMatchId(IEnumerable<int> items, int itemId, ItemType itemType)
+        private static (int Count, int Available, int Total, int[] Good, int[] Bad) GetItemsInfoMatchId(IEnumerable<int> items, int actorId, int itemId, ItemType itemType)
         {
             int count = 0, avail = 0, total = 0;
             int[] good = new int[10], bad = new int[10];
             // 物品对应的固定Id，非物品唯一Id
             var itemKey = DateFile.instance.GetItemDate(itemId, 999);
-            if(int.Parse(itemKey) > 0)
+            if (int.Parse(itemKey) > 0)
             {
                 // 物品是否可堆叠
                 var stackable = int.Parse(DateFile.instance.GetItemDate(itemId, 6)) != 0;
                 foreach (var key in items.Where(k => IsSameItem(DateFile.instance.GetItemDate(k, 999), itemKey)))
                 {
-                    count += stackable ? DateFile.instance.actorItemsDate[-999][key] : 1;
+                    count += stackable ? DateFile.instance.actorItemsDate[actorId][key] : 1;
                     avail += int.Parse((Items.GetItem(key) != null) ? DateFile.instance.GetItemDate(key, 901) : DateFile.instance.GetItemDate(key, 902));
                     total += int.Parse((Items.GetItem(key) != null) ? Items.GetItemProperty(key, 902) : DateFile.instance.GetItemDate(key, 902));
                     if (StorageCheck.Settings.ShowBookInfo.Value && itemType != ItemType.Other)
